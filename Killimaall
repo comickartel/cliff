@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Core Control Matrix</title>
+    <style>
+        /* CSS Reset & Variables */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-deep: #060913;
+            --bg-surface: #0d1222;
+            --bg-surface-hover: #141c34;
+            --border-color: #1e294b;
+            --border-glow: #38bdf8;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-orange: #f97316;
+            --accent-blue: #2563eb;
+        }
+
+        /* Animated Fluid Mesh Background */
+        body {
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(249, 115, 22, 0.12) 0%, transparent 45%);
+            background-size: 100% 100%;
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Container Layout */
+        .matrix-container {
+            width: 100%;
+            max-w: 900px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header Display */
+        .matrix-header {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .matrix-header h1 {
+            font-size: 2.25rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            margin-bottom: 8px;
+            background: linear-gradient(to right, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .matrix-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Grid System */
+        .portal-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .portal-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Dynamic Control Cards */
+        .portal-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), 
+                        border-color 0.3s ease, 
+                        box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .portal-card:hover {
+            transform: translateY(-4px);
+            background: var(--bg-surface-hover);
+            border-color: var(--border-glow);
+            box-shadow: 0 12px 30px rgba(56, 189, 248, 0.06);
+        }
+
+        /* Interactive Ping Indicator */
+        .status-badge {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #10b981;
+        }
+
+        .ping-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .ping-dot::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #10b981;
+            border-radius: 50%;
+            animation: pulse-ring 1.5s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+            top: 0;
+            left: 0;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.5); opacity: 1; }
+            80%, 100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        /* Typography & Content inside Cards */
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .card-desc {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 40px;
+        }
+
+        /* Pure CSS Action UI Triggers */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px 24px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: filter 0.2s ease, transform 0.1s ease;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-pph {
+            background: var(--accent-orange);
+            color: #ffffff;
+        }
+
+        .btn-kili {
+            background: var(--accent-blue);
+            color: #ffffff;
+        }
+
+        .action-btn:hover {
+            filter: brightness(1.15);
+        }
+
+        /* SVG Vector Glyphs */
+        .icon-arrow {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="matrix-container">
+        <!-- Main Frame Header -->
+        <header class="matrix-header">
+            <h1>Platform Gateway Node</h1>
+            <p>Unified secure routing matrices for active network deployments.</p>
+        </header>
+
+        <!-- Operational Interface Grid -->
+        <div class="portal-grid">
+            
+            <!-- PeoplePerHour Terminal Block -->
+            <div class="portal-card" onclick="window.open('https://peopleperhour.com', '_blank')">
+                <div class="status-badge">
+                    <span class="ping-dot"></span> Active
+                </div>
+                <div>
+                    <h2 class="card-title" style="color: var(--accent-orange);">PeoplePerHour</h2>
+                    <p class="card-desc">Execute external contract logic and fetch targeted regional developer arrays from the freelance stream.</p>
+                </div>
+                <a href="https://peopleperhour.com" target="_blank" rel="noopener noreferrer" class="action-btn btn-pph" onclick="event.stopPropagation();">
+                    Connect Pipeline
+                    <svg class="icon-arrow" viewBox="0 0 24 24"><path d="M5 21h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zM9 8h6a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0v-2.586l-4.293 4.293a1 1 0 0 1-1.414-1.414L12.586 11H10a1 1 0 0 1 0-2h6z"/></svg>
+                </a>
+            </div>
+
+            <!-- Kilimall Terminal Block -->
+            <div class="portal-card" onclick="window.open('https://kilimall.co.ke', '_blank')">
+                <div class="status-badge">
+                    <span class="ping-dot"></span> Syncing
+                </div>
+                <div>
+                    <h2 class="card-title" style="color: #3b82f6;">Kilimall</h2>
+                    <p class="card-desc">Process commercial payloads and cross-border logistics metrics throughout East African merchant nodes.</p>
+                </div>
+                <a href="https://kilimall.co.ke" target="_blank" rel="noopener noreferrer" class="action-btn btn-kili" onclick="event.stopPropagation();">
+                    Initialize Hub
+                    <svg class="icon-arrow" viewBox="0 0 24 24"><path d="M5 21h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2zM9 8h6a1 1 0 0 1 1 1v6a1 1 0 0 1-2 0v-2.586l-4.293 4.293a1 1 0 0 1-1.414-1.414L12.586 11H10a1 1 0 0 1 0-2h6z"/></svg>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
