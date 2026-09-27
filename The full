@@ -1,0 +1,2931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RYAN RONALD | Movies & Premium</title>
+
+<!-- Paystack -->
+<script src="https://js.paystack.co/v2/inline.js"></script>
+
+<style>
+
+/* =========================================
+   RESET
+========================================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#03050d;
+    color:white;
+    overflow-x:hidden;
+}
+
+/* =========================================
+   ANIMATED BACKGROUND
+========================================= */
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-3;
+
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(0,100,255,.28),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 70%,
+            rgba(255,0,45,.28),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #02040a,
+            #08000b,
+            #02040a
+        );
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    z-index:-2;
+
+    opacity:.15;
+
+    background-image:
+        linear-gradient(
+            rgba(0,100,255,.25) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,0,50,.2) 1px,
+            transparent 1px
+        );
+
+    background-size:45px 45px;
+
+    animation:gridMove 15s linear infinite;
+}
+
+@keyframes gridMove{
+
+    from{
+        transform:translateY(0);
+    }
+
+    to{
+        transform:translateY(45px);
+    }
+
+}
+
+/* =========================================
+   NAVBAR
+========================================= */
+
+header{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    z-index:1000;
+
+    padding:18px 6%;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+
+    background:rgba(2,5,15,.82);
+
+    backdrop-filter:blur(15px);
+
+    border-bottom:
+        1px solid rgba(0,120,255,.25);
+
+    transition:.3s;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:900;
+    letter-spacing:2px;
+
+    color:white;
+
+    text-shadow:
+        0 0 5px #087cff,
+        0 0 15px #087cff,
+        0 0 30px #ff1744;
+
+    animation:blink 2s infinite alternate;
+}
+
+@keyframes blink{
+
+    from{
+        filter:brightness(.75);
+    }
+
+    to{
+        filter:brightness(1.5);
+    }
+
+}
+
+nav{
+    display:flex;
+    gap:22px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight:bold;
+    transition:.3s;
+}
+
+nav a:hover{
+    color:#168cff;
+
+    text-shadow:
+        0 0 10px #168cff;
+}
+
+/* SEARCH */
+
+.search{
+    display:flex;
+    gap:8px;
+}
+
+.search input{
+    width:190px;
+
+    padding:10px 14px;
+
+    border-radius:30px;
+
+    border:1px solid #147cff;
+
+    background:#050914;
+
+    color:white;
+
+    outline:none;
+}
+
+.search button{
+    border:none;
+
+    border-radius:50%;
+
+    width:40px;
+    height:40px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #087cff,
+            #ff1744
+        );
+
+    color:white;
+
+    cursor:pointer;
+}
+
+/* =========================================
+   HERO
+========================================= */
+
+.hero{
+    min-height:100vh;
+
+    display:flex;
+    align-items:center;
+
+    padding:
+        140px
+        7%
+        80px;
+
+    position:relative;
+}
+
+.hero-content{
+    max-width:720px;
+}
+
+.hero h1{
+    font-size:
+        clamp(
+            45px,
+            7vw,
+            90px
+        );
+
+    line-height:.95;
+
+    margin-bottom:25px;
+}
+
+.hero h1 span{
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #fff,
+            #ff1744
+        );
+
+    -webkit-background-clip:text;
+
+    color:transparent;
+}
+
+.hero p{
+    color:#b9c3d8;
+
+    font-size:18px;
+
+    line-height:1.7;
+
+    margin-bottom:30px;
+}
+
+.buttons{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.btn{
+    padding:14px 25px;
+
+    border-radius:30px;
+
+    text-decoration:none;
+
+    color:white;
+
+    font-weight:bold;
+
+    border:
+        1px solid #168cff;
+
+    background:#061020;
+
+    transition:.3s;
+
+    cursor:pointer;
+}
+
+.btn:hover{
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 0 25px #087cff;
+}
+
+.btn.primary{
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #ff1744
+        );
+
+    border:none;
+}
+
+/* =========================================
+   SECTIONS
+========================================= */
+
+section{
+    padding:90px 6%;
+}
+
+.section-title{
+    font-size:38px;
+    margin-bottom:35px;
+}
+
+.section-title span{
+    color:#168cff;
+}
+
+/* =========================================
+   FILTERS
+========================================= */
+
+.filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+
+    margin-bottom:35px;
+}
+
+.filter{
+    padding:10px 20px;
+
+    border:
+        1px solid #123c70;
+
+    background:#07101e;
+
+    color:#ddd;
+
+    border-radius:25px;
+
+    cursor:pointer;
+
+    transition:.3s;
+}
+
+.filter:hover,
+.filter.active{
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #ff1744
+        );
+
+    color:white;
+
+    border-color:transparent;
+}
+
+/* =========================================
+   MOVIE GRID
+========================================= */
+
+.movie-grid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(190px,1fr)
+        );
+
+    gap:25px;
+}
+
+.movie{
+    background:
+        rgba(8,12,25,.85);
+
+    border:
+        1px solid
+        rgba(30,120,255,.25);
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+    transition:.4s;
+
+    position:relative;
+}
+
+.movie:hover{
+    transform:
+        translateY(-10px)
+        scale(1.02);
+
+    border-color:#087cff;
+
+    box-shadow:
+        0 0 20px
+        rgba(0,110,255,.3),
+
+        0 0 30px
+        rgba(255,0,50,.15);
+}
+
+.poster{
+    height:285px;
+    overflow:hidden;
+}
+
+.poster img{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:.5s;
+}
+
+.movie:hover .poster img{
+    transform:scale(1.1);
+}
+
+.movie-info{
+    padding:16px;
+}
+
+.movie-info h3{
+    font-size:18px;
+    margin-bottom:7px;
+}
+
+.movie-info p{
+    color:#8f9bb2;
+    font-size:13px;
+    margin-bottom:13px;
+}
+
+.trailer-btn{
+    width:100%;
+
+    padding:10px;
+
+    border:none;
+
+    border-radius:20px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #ff1744
+        );
+
+    color:white;
+
+    font-weight:bold;
+
+    cursor:pointer;
+}
+
+/* =========================================
+   PREMIUM SUBSCRIPTION
+========================================= */
+
+.subscription-section{
+    position:relative;
+
+    padding:
+        110px 6%;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at 20% 30%,
+            rgba(0,110,255,.18),
+            transparent 35%
+        ),
+
+        radial-gradient(
+            circle at 80% 70%,
+            rgba(255,0,60,.18),
+            transparent 35%
+        ),
+
+        #03050d;
+}
+
+.subscription-section::before{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 40%,
+            rgba(0,120,255,.06),
+            transparent 60%
+        );
+
+    animation:
+        premiumSweep 7s linear infinite;
+
+    pointer-events:none;
+}
+
+@keyframes premiumSweep{
+
+    0%{
+        transform:translateX(-100%);
+    }
+
+    100%{
+        transform:translateX(100%);
+    }
+
+}
+
+.subscription-header{
+    position:relative;
+
+    text-align:center;
+
+    max-width:750px;
+
+    margin:
+        0 auto 55px;
+}
+
+.premium-badge{
+    display:inline-block;
+
+    padding:8px 18px;
+
+    border-radius:30px;
+
+    font-size:12px;
+
+    font-weight:900;
+
+    letter-spacing:2px;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #ff1744
+        );
+
+    box-shadow:
+        0 0 20px
+        rgba(0,120,255,.35),
+
+        0 0 30px
+        rgba(255,0,60,.25);
+
+    margin-bottom:20px;
+}
+
+.subscription-header h2{
+    font-size:
+        clamp(
+            35px,
+            5vw,
+            65px
+        );
+
+    line-height:1.05;
+
+    margin-bottom:18px;
+}
+
+.subscription-header h2 span{
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #ffffff,
+            #ff1744
+        );
+
+    -webkit-background-clip:text;
+
+    color:transparent;
+}
+
+.subscription-header p{
+    color:#aebbd0;
+
+    font-size:17px;
+
+    line-height:1.7;
+}
+
+.pricing-grid{
+    position:relative;
+
+    max-width:1200px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:25px;
+}
+
+.price-card{
+    position:relative;
+
+    padding:35px 28px;
+
+    border-radius:25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(10,18,38,.95),
+            rgba(4,7,18,.95)
+        );
+
+    border:
+        1px solid
+        rgba(40,130,255,.25);
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.35);
+
+    transition:
+        transform .4s,
+        border-color .4s,
+        box-shadow .4s;
+
+    overflow:hidden;
+}
+
+.price-card::before{
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+    height:180px;
+
+    top:-90px;
+    right:-90px;
+
+    background:#087cff;
+
+    filter:blur(90px);
+
+    opacity:.18;
+}
+
+.price-card:hover{
+    transform:
+        translateY(-12px)
+        scale(1.02);
+
+    border-color:#087cff;
+
+    box-shadow:
+        0 0 25px
+        rgba(0,110,255,.3),
+
+        0 25px 70px
+        rgba(0,0,0,.5);
+}
+
+.price-card.popular{
+    border-color:#ff1744;
+
+    box-shadow:
+        0 0 35px
+        rgba(255,23,68,.18);
+}
+
+.popular-label{
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    text-align:center;
+
+    padding:9px;
+
+    font-size:11px;
+
+    font-weight:900;
+
+    letter-spacing:2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #ff1744
+        );
+}
+
+.plan-icon{
+    font-size:42px;
+
+    margin-bottom:18px;
+}
+
+.price-card h3{
+    font-size:27px;
+
+    margin-bottom:12px;
+}
+
+.price{
+    font-size:42px;
+
+    font-weight:900;
+
+    margin-bottom:12px;
+}
+
+.price span{
+    font-size:15px;
+
+    color:#168cff;
+
+    vertical-align:top;
+}
+
+.price small{
+    font-size:13px;
+
+    color:#7e8ba4;
+
+    font-weight:normal;
+}
+
+.plan-description{
+    color:#9ba8bf;
+
+    margin-bottom:25px;
+
+    line-height:1.6;
+}
+
+.price-card ul{
+    list-style:none;
+
+    margin-bottom:28px;
+}
+
+.price-card li{
+    padding:9px 0;
+
+    color:#d9e1ef;
+
+    font-size:14px;
+}
+
+.subscribe-btn{
+    width:100%;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:30px;
+
+    cursor:pointer;
+
+    color:white;
+
+    font-weight:900;
+
+    font-size:15px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #087cff,
+            #ff1744
+        );
+
+    box-shadow:
+        0 0 20px
+        rgba(0,110,255,.2);
+
+    transition:.3s;
+}
+
+.subscribe-btn:hover{
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 0 30px
+        rgba(0,120,255,.45),
+
+        0 0 40px
+        rgba(255,0,50,.2);
+}
+
+.payment-note{
+    position:relative;
+
+    text-align:center;
+
+    margin-top:35px;
+
+    color:#7f8da5;
+
+    font-size:13px;
+}
+
+/* =========================================
+   FEATURED
+========================================= */
+
+.featured{
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,80,255,.18),
+            rgba(255,0,50,.15)
+        ),
+        rgba(5,8,18,.8);
+
+    border-top:
+        1px solid
+        rgba(0,120,255,.2);
+
+    border-bottom:
+        1px solid
+        rgba(255,0,50,.2);
+}
+
+.feature-box{
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap:40px;
+
+    align-items:center;
+}
+
+.feature-box img{
+    width:100%;
+
+    border-radius:20px;
+
+    box-shadow:
+        0 0 40px
+        rgba(0,110,255,.25);
+}
+
+.feature-box h2{
+    font-size:45px;
+
+    margin-bottom:15px;
+}
+
+.feature-box p{
+    color:#b4bfd2;
+
+    line-height:1.7;
+}
+
+/* =========================================
+   ABOUT
+========================================= */
+
+.about{
+    text-align:center;
+
+    max-width:850px;
+
+    margin:auto;
+}
+
+.about p{
+    color:#aab5c9;
+
+    line-height:1.8;
+}
+
+/* =========================================
+   MODAL
+========================================= */
+
+.modal{
+    display:none;
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:3000;
+
+    background:
+        rgba(0,0,0,.92);
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:20px;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-box{
+    width:min(900px,100%);
+
+    background:#060a15;
+
+    border:
+        1px solid #087cff;
+
+    border-radius:20px;
+
+    padding:15px;
+
+    box-shadow:
+        0 0 50px
+        rgba(0,100,255,.3);
+
+    position:relative;
+}
+
+.modal iframe{
+    width:100%;
+
+    height:500px;
+
+    border:none;
+
+    border-radius:12px;
+}
+
+.close{
+    position:absolute;
+
+    right:-10px;
+
+    top:-15px;
+
+    width:40px;
+    height:40px;
+
+    border-radius:50%;
+
+    border:none;
+
+    background:#ff1744;
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+}
+
+/* =========================================
+   FOOTER
+========================================= */
+
+footer{
+    text-align:center;
+
+    padding:35px;
+
+    border-top:
+        1px solid
+        rgba(0,100,255,.2);
+
+    color:#7f8ba2;
+}
+
+footer strong{
+    color:#168cff;
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:850px){
+
+    header{
+        flex-wrap:wrap;
+    }
+
+    nav{
+        order:3;
+
+        width:100%;
+
+        justify-content:center;
+
+        gap:15px;
+    }
+
+    .search{
+        margin-left:auto;
+    }
+
+    .pricing-grid{
+        grid-template-columns:1fr;
+
+        max-width:500px;
+    }
+
+    .feature-box{
+        grid-template-columns:1fr;
+    }
+
+    .feature-box h2{
+        font-size:35px;
+    }
+
+    .modal iframe{
+        height:300px;
+    }
+
+}
+
+@media(max-width:500px){
+
+    .movie-grid{
+        grid-template-columns:
+            repeat(2,1fr);
+
+        gap:12px;
+    }
+
+    .poster{
+        height:230px;
+    }
+
+    .movie-info{
+        padding:10px;
+    }
+
+    .movie-info h3{
+        font-size:15px;
+    }
+
+    .hero{
+        padding-left:5%;
+        padding-right:5%;
+    }
+
+    .search input{
+        width:130px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================================
+     HEADER
+========================================= -->
+
+<header id="header">
+
+    <div class="logo">
+        🎬 RYAN RONALD
+    </div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#movies">Movies</a>
+        <a href="#subscribe">Premium</a>
+        <a href="#featured">Featured</a>
+        <a href="#about">About</a>
+    </nav>
+
+    <div class="search">
+
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Search movies..."
+        >
+
+        <button onclick="searchMovies()">
+            🔍
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================
+     HERO
+========================================= -->
+
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <h1>
+
+            WATCH.<br>
+
+            <span>
+                DISCOVER.
+            </span><br>
+
+            ENJOY.
+
+        </h1>
+
+        <p>
+
+            Welcome to Ryan Ronald Movies —
+            your cinematic destination for action,
+            adventure, science fiction, comedy,
+            drama and more.
+
+        </p>
+
+        <div class="buttons">
+
+            <a
+                href="#movies"
+                class="btn primary"
+            >
+                🎥 Explore Movies
+            </a>
+
+            <a
+                href="#subscribe"
+                class="btn"
+            >
+                ⚡ Go Premium
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     MOVIES
+========================================= -->
+
+<section id="movies">
+
+    <h2 class="section-title">
+
+        🎬
+        <span>
+            Movie Collection
+        </span>
+
+    </h2>
+
+    <div class="filters">
+
+        <button
+            class="filter active"
+            onclick="filterMovies('all',this)"
+        >
+            All
+        </button>
+
+        <button
+            class="filter"
+            onclick="filterMovies('action',this)"
+        >
+            Action
+        </button>
+
+        <button
+            class="filter"
+            onclick="filterMovies('scifi',this)"
+        >
+            Sci-Fi
+        </button>
+
+        <button
+            class="filter"
+            onclick="filterMovies('adventure',this)"
+        >
+            Adventure
+        </button>
+
+        <button
+            class="filter"
+            onclick="filterMovies('comedy',this)"
+        >
+            Comedy
+        </button>
+
+        <button
+            class="filter"
+            onclick="filterMovies('drama',this)"
+        >
+            Drama
+        </button>
+
+        <button
+            class="filter"
+            onclick="filterMovies('animation',this)"
+        >
+            Animation
+        </button>
+
+        <button
+            class="filter"
+            onclick="filterMovies('thriller',this)"
+        >
+            Thriller
+        </button>
+
+    </div>
+
+
+    <div class="movie-grid" id="movieGrid">
+
+
+        <!-- MOVIE 1 -->
+
+        <article
+            class="movie"
+            data-category="action comedy"
+            data-title="Deadpool"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/fSRb7vyIP8rQpL0I47P3qUsEKX3.jpg"
+                    alt="Deadpool"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Deadpool
+                </h3>
+
+                <p>
+                    2016 • Action / Comedy
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('ONHBaC-pfsk')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 2 -->
+
+        <article
+            class="movie"
+            data-category="action comedy"
+            data-title="Deadpool 2"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/to0spRl1CMDvyUbOnbb4fTk3VAd.jpg"
+                    alt="Deadpool 2"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Deadpool 2
+                </h3>
+
+                <p>
+                    2018 • Action / Comedy
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('D86RtevtfrA')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 3 -->
+
+        <article
+            class="movie"
+            data-category="action comedy"
+            data-title="Deadpool Wolverine"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
+                    alt="Deadpool Wolverine"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Deadpool & Wolverine
+                </h3>
+
+                <p>
+                    2024 • Action / Comedy
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('73_1biulkYk')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 4 -->
+
+        <article
+            class="movie"
+            data-category="action scifi"
+            data-title="Avengers Endgame"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg"
+                    alt="Avengers Endgame"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Avengers: Endgame
+                </h3>
+
+                <p>
+                    2019 • Action / Sci-Fi
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('TcMBFSGVi1c')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 5 -->
+
+        <article
+            class="movie"
+            data-category="scifi drama"
+            data-title="Interstellar"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+                    alt="Interstellar"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Interstellar
+                </h3>
+
+                <p>
+                    2014 • Sci-Fi / Drama
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('zSWdZVtXT7E')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 6 -->
+
+        <article
+            class="movie"
+            data-category="scifi adventure"
+            data-title="Avatar"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/kyeqWdyUXW608qlYkRqosgbbJyK.jpg"
+                    alt="Avatar"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Avatar
+                </h3>
+
+                <p>
+                    2009 • Sci-Fi / Adventure
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('5PSNL1qE6VY')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 7 -->
+
+        <article
+            class="movie"
+            data-category="adventure scifi"
+            data-title="Avatar Way of Water"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/t6HIqrRAclMCA60NsSmeqe9RmNV.jpg"
+                    alt="Avatar Way of Water"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Avatar: The Way of Water
+                </h3>
+
+                <p>
+                    2022 • Adventure / Sci-Fi
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('d9MyW72ELq0')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 8 -->
+
+        <article
+            class="movie"
+            data-category="action thriller"
+            data-title="The Batman"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/74xTEgt7R36Fpooo50r9T25onhq.jpg"
+                    alt="The Batman"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    The Batman
+                </h3>
+
+                <p>
+                    2022 • Action / Thriller
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('mqqft2x_Aa4')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 9 -->
+
+        <article
+            class="movie"
+            data-category="comedy action"
+            data-title="Free Guy"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/xmbU4JTUm8rsdtn7FJ7X9B3bQ2V.jpg"
+                    alt="Free Guy"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Free Guy
+                </h3>
+
+                <p>
+                    2021 • Comedy / Action
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('X2m-08cOAbc')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 10 -->
+
+        <article
+            class="movie"
+            data-category="action comedy"
+            data-title="Red Notice"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/lAXONuqg41NwUMuzMiFvic3dV4Q.jpg"
+                    alt="Red Notice"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Red Notice
+                </h3>
+
+                <p>
+                    2021 • Action / Comedy
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('Pj0wz7zu3Ms')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 11 -->
+
+        <article
+            class="movie"
+            data-category="scifi adventure"
+            data-title="The Adam Project"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/wFjboE0aFZNbVOF05fzrka9Fqyx.jpg"
+                    alt="The Adam Project"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    The Adam Project
+                </h3>
+
+                <p>
+                    2022 • Sci-Fi / Adventure
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('IE8HIsIrq4o')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 12 -->
+
+        <article
+            class="movie"
+            data-category="thriller drama"
+            data-title="Joker"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/udDclJoHjfjb8Ekgsd4FDteOkCU.jpg"
+                    alt="Joker"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Joker
+                </h3>
+
+                <p>
+                    2019 • Drama / Thriller
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('zAGVQLHvwOY')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 13 -->
+
+        <article
+            class="movie"
+            data-category="action thriller"
+            data-title="John Wick"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/fZPSd91yGE9fCcCe6OoQr6E3Bev.jpg"
+                    alt="John Wick"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    John Wick
+                </h3>
+
+                <p>
+                    2014 • Action / Thriller
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('C0BMx-qxsP4')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 14 -->
+
+        <article
+            class="movie"
+            data-category="action thriller"
+            data-title="John Wick Chapter 4"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/vZloFAK7NmvMGKE7VkF5UHaz0I.jpg"
+                    alt="John Wick Chapter 4"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    John Wick: Chapter 4
+                </h3>
+
+                <p>
+                    2023 • Action / Thriller
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('qEVUtrk8_B4')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 15 -->
+
+        <article
+            class="movie"
+            data-category="animation action"
+            data-title="Spider Man Into Spider Verse"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/8Vt6mWEReuy4Of61Lnj5Xj704m8.jpg"
+                    alt="Spider-Man"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Spider-Man: Into the Spider-Verse
+                </h3>
+
+                <p>
+                    2018 • Animation / Action
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('g4Hbz2jLxvQ')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 16 -->
+
+        <article
+            class="movie"
+            data-category="action adventure"
+            data-title="Spider Man No Way Home"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/1g0dhYtq4irTY1GPXvft6k4YLjm.jpg"
+                    alt="Spider-Man No Way Home"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Spider-Man: No Way Home
+                </h3>
+
+                <p>
+                    2021 • Action / Adventure
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('JfVOs4VSpmA')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 17 -->
+
+        <article
+            class="movie"
+            data-category="action scifi"
+            data-title="Iron Man"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/78lPtwv72eTNqFW9COBYI0dWDJa.jpg"
+                    alt="Iron Man"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Iron Man
+                </h3>
+
+                <p>
+                    2008 • Action / Sci-Fi
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('8ugaeA-nMTc')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 18 -->
+
+        <article
+            class="movie"
+            data-category="action adventure"
+            data-title="Black Panther"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg"
+                    alt="Black Panther"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Black Panther
+                </h3>
+
+                <p>
+                    2018 • Action / Adventure
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('xjDjIWPwcPU')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 19 -->
+
+        <article
+            class="movie"
+            data-category="adventure scifi"
+            data-title="Jurassic World"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/A0LZhxJ7S1Z0W6K8Z9W7bR0Zz1.jpg"
+                    alt="Jurassic World"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Jurassic World
+                </h3>
+
+                <p>
+                    2015 • Adventure / Sci-Fi
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('RFinNxS5KN4')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 20 -->
+
+        <article
+            class="movie"
+            data-category="comedy"
+            data-title="The Hangover"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/uluhlXubGu1VxU63X9VHCLWDAYP.jpg"
+                    alt="The Hangover"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    The Hangover
+                </h3>
+
+                <p>
+                    2009 • Comedy
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('tlize92ffnY')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 21 -->
+
+        <article
+            class="movie"
+            data-category="animation adventure"
+            data-title="Toy Story"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg"
+                    alt="Toy Story"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Toy Story
+                </h3>
+
+                <p>
+                    1995 • Animation / Adventure
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('v-PjgYDrg70')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 22 -->
+
+        <article
+            class="movie"
+            data-category="animation"
+            data-title="Coco"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/gGEsBPAijhVUFoiNpgZXqRVWJt2.jpg"
+                    alt="Coco"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Coco
+                </h3>
+
+                <p>
+                    2017 • Animation / Family
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('Ga6RYejo6Hk')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 23 -->
+
+        <article
+            class="movie"
+            data-category="adventure action"
+            data-title="Pirates Caribbean"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/poHwMZV7L6G6wXn5x3mL5zK9Vf.jpg"
+                    alt="Pirates of the Caribbean"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    Pirates of the Caribbean
+                </h3>
+
+                <p>
+                    2003 • Adventure / Action
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('naQr0uTrH_s')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+
+        <!-- MOVIE 24 -->
+
+        <article
+            class="movie"
+            data-category="drama"
+            data-title="The Shawshank Redemption"
+        >
+
+            <div class="poster">
+
+                <img
+                    src="https://image.tmdb.org/t/p/w500/9cqNxx0GxF0bflZmeSMuL5tnGzr.jpg"
+                    alt="The Shawshank Redemption"
+                >
+
+            </div>
+
+            <div class="movie-info">
+
+                <h3>
+                    The Shawshank Redemption
+                </h3>
+
+                <p>
+                    1994 • Drama
+                </p>
+
+                <button
+                    class="trailer-btn"
+                    onclick="openTrailer('6hB3S9bIaco')"
+                >
+                    ▶ Trailer
+                </button>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     SUBSCRIPTION
+========================================= -->
+
+<section
+    class="subscription-section"
+    id="subscribe"
+>
+
+    <div class="subscription-header">
+
+        <span class="premium-badge">
+            ⚡ RYAN RONALD PREMIUM
+        </span>
+
+        <h2>
+
+            Upgrade Your
+            <span>
+                Movie Experience
+            </span>
+
+        </h2>
+
+        <p>
+
+            Support Ryan Ronald Movies and
+            unlock premium features.
+
+        </p>
+
+    </div>
+
+
+    <div class="pricing-grid">
+
+
+        <!-- BASIC -->
+
+        <div class="price-card">
+
+            <div class="plan-icon">
+                🎬
+            </div>
+
+            <h3>
+                Basic
+            </h3>
+
+            <div class="price">
+
+                <span>
+                    KES
+                </span>
+
+                199
+
+                <small>
+                    /month
+                </small>
+
+            </div>
+
+            <p class="plan-description">
+                Great for casual movie fans.
+            </p>
+
+            <ul>
+
+                <li>
+                    ✓ Movie collection
+                </li>
+
+                <li>
+                    ✓ Movie search
+                </li>
+
+                <li>
+                    ✓ Genre filters
+                </li>
+
+                <li>
+                    ✓ Trailer access
+                </li>
+
+            </ul>
+
+            <button
+                class="subscribe-btn"
+                onclick="startPayment(199,'Basic')"
+            >
+                Subscribe
+            </button>
+
+        </div>
+
+
+        <!-- PRO -->
+
+        <div class="price-card popular">
+
+            <div class="popular-label">
+                MOST POPULAR
+            </div>
+
+            <div class="plan-icon">
+                🔥
+            </div>
+
+            <h3>
+                Pro
+            </h3>
+
+            <div class="price">
+
+                <span>
+                    KES
+                </span>
+
+                499
+
+                <small>
+                    /month
+                </small>
+
+            </div>
+
+            <p class="plan-description">
+                For serious movie lovers.
+            </p>
+
+            <ul>
+
+                <li>
+                    ✓ Everything in Basic
+                </li>
+
+                <li>
+                    ✓ Premium collections
+                </li>
+
+                <li>
+                    ✓ Early access
+                </li>
+
+                <li>
+                    ✓ Premium badge
+                </li>
+
+                <li>
+                    ✓ Priority features
+                </li>
+
+            </ul>
+
+            <button
+                class="subscribe-btn"
+                onclick="startPayment(499,'Pro')"
+            >
+                ⚡ Go Premium
+            </button>
+
+        </div>
+
+
+        <!-- ULTRA -->
+
+        <div class="price-card">
+
+            <div class="plan-icon">
+                👑
+            </div>
+
+            <h3>
+                Ultra
+            </h3>
+
+            <div class="price">
+
+                <span>
+                    KES
+                </span>
+
+                999
+
+                <small>
+                    /month
+                </small>
+
+            </div>
+
+            <p class="plan-description">
+                The ultimate Ryan Ronald experience.
+            </p>
+
+            <ul>
+
+                <li>
+                    ✓ Everything in Pro
+                </li>
+
+                <li>
+                    ✓ VIP features
+                </li>
+
+                <li>
+                    ✓ Exclusive content
+                </li>
+
+                <li>
+                    ✓ VIP badge
+                </li>
+
+                <li>
+                    ✓ Supporter status
+                </li>
+
+            </ul>
+
+            <button
+                class="subscribe-btn"
+                onclick="startPayment(999,'Ultra')"
+            >
+                👑 Join Ultra
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="payment-note">
+
+        🔒 Secure checkout
+        • 💳 Card
+        • 📱 M-PESA
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     FEATURED
+========================================= -->
+
+<section
+    class="featured"
+    id="featured"
+>
+
+    <div class="feature-box">
+
+        <img
+            src="https://image.tmdb.org/t/p/original/8cdWjvZQUExUUTzyp4t6EDMubfO.jpg"
+            alt="Deadpool and Wolverine"
+        >
+
+        <div>
+
+            <h2>
+                DEADPOOL & WOLVERINE
+            </h2>
+
+            <p>
+
+                Enter the multiverse with
+                two of Marvel's most unpredictable
+                characters.
+
+            </p>
+
+            <br>
+
+            <button
+                class="btn primary"
+                onclick="openTrailer('73_1biulkYk')"
+            >
+                ▶ Watch Trailer
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     ABOUT
+========================================= -->
+
+<section id="about">
+
+    <div class="about">
+
+        <h2 class="section-title">
+
+            About
+            <span>
+                Ryan Ronald
+            </span>
+
+        </h2>
+
+        <p>
+
+            Ryan Ronald is a cinematic movie
+            discovery website built with HTML,
+            CSS and JavaScript.
+
+            Browse movies, search titles,
+            filter by genre and open trailers
+            without leaving the page.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================
+     FOOTER
+========================================= -->
+
+<footer>
+
+    © 2026
+
+    <strong>
+        RYAN RONALD
+    </strong>
+
+    • Movie Discovery Website
+
+</footer>
+
+
+<!-- =========================================
+     TRAILER MODAL
+========================================= -->
+
+<div
+    class="modal"
+    id="trailerModal"
+>
+
+    <div class="modal-box">
+
+        <button
+            class="close"
+            onclick="closeTrailer()"
+        >
+            ×
+        </button>
+
+        <iframe
+            id="trailerFrame"
+            src=""
+            allow="autoplay; encrypted-media"
+            allowfullscreen>
+        </iframe>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================
+   TRAILER
+========================================= */
+
+function openTrailer(videoId){
+
+    const modal =
+        document.getElementById(
+            "trailerModal"
+        );
+
+    const frame =
+        document.getElementById(
+            "trailerFrame"
+        );
+
+    frame.src =
+        "https://www.youtube.com/embed/" +
+        videoId +
+        "?autoplay=1";
+
+    modal.classList.add("active");
+
+}
+
+
+/* =========================================
+   CLOSE TRAILER
+========================================= */
+
+function closeTrailer(){
+
+    const modal =
+        document.getElementById(
+            "trailerModal"
+        );
+
+    const frame =
+        document.getElementById(
+            "trailerFrame"
+        );
+
+    frame.src = "";
+
+    modal.classList.remove(
+        "active"
+    );
+
+}
+
+
+/* =========================================
+   ESCAPE KEY
+========================================= */
+
+document
+    .getElementById("trailerModal")
+    .addEventListener(
+        "click",
+        function(e){
+
+            if(e.target === this){
+
+                closeTrailer();
+
+            }
+
+        }
+    );
+
+
+document.addEventListener(
+    "keydown",
+    function(e){
+
+        if(e.key === "Escape"){
+
+            closeTrailer();
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   FILTER MOVIES
+========================================= */
+
+function filterMovies(
+    category,
+    button
+){
+
+    document
+        .querySelectorAll(".filter")
+        .forEach(btn => {
+
+            btn.classList.remove(
+                "active"
+            );
+
+        });
+
+    button.classList.add(
+        "active"
+    );
+
+
+    document
+        .querySelectorAll(".movie")
+        .forEach(movie => {
+
+            if(
+                category === "all" ||
+                movie.dataset.category
+                    .includes(category)
+            ){
+
+                movie.style.display = "";
+
+            }else{
+
+                movie.style.display =
+                    "none";
+
+            }
+
+        });
+
+}
+
+
+/* =========================================
+   SEARCH
+========================================= */
+
+function searchMovies(){
+
+    const query =
+        document
+            .getElementById(
+                "searchInput"
+            )
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    document
+        .querySelectorAll(".movie")
+        .forEach(movie => {
+
+            const title =
+                movie.dataset.title
+                    .toLowerCase();
+
+
+            movie.style.display =
+                title.includes(query)
+                    ? ""
+                    : "none";
+
+        });
+
+}
+
+
+/* =========================================
+   LIVE SEARCH
+========================================= */
+
+document
+    .getElementById(
+        "searchInput"
+    )
+    .addEventListener(
+        "input",
+        searchMovies
+    );
+
+
+/* =========================================
+   HEADER SCROLL EFFECT
+========================================= */
+
+window.addEventListener(
+    "scroll",
+    function(){
+
+        const header =
+            document.getElementById(
+                "header"
+            );
+
+
+        if(window.scrollY > 50){
+
+            header.style.background =
+                "rgba(2,5,15,.97)";
+
+            header.style.boxShadow =
+                "0 5px 30px rgba(0,80,255,.2)";
+
+        }else{
+
+            header.style.background =
+                "rgba(2,5,15,.82)";
+
+            header.style.boxShadow =
+                "none";
+
+        }
+
+    }
+);
+
+
+/* =========================================
+   PAYSTACK PAYMENT
+========================================= */
+
+function startPayment(
+    amount,
+    plan
+){
+
+    const email = prompt(
+        "Enter your email address to continue:"
+    );
+
+
+    if(!email){
+
+        return;
+
+    }
+
+
+    if(!email.includes("@")){
+
+        alert(
+            "Please enter a valid email address."
+        );
+
+        return;
+
+    }
+
+
+    /*
+       IMPORTANT:
+
+       Replace the value below with your
+       Paystack PUBLIC key.
+
+       Example:
+
+       key: "pk_test_xxxxxxxxxxxxx"
+
+       NEVER put your secret key here.
+    */
+
+    const popup =
+        new PaystackPop();
+
+
+    popup.newTransaction({
+
+        key:
+            "YOUR_PAYSTACK_PUBLIC_KEY",
+
+        email:
+            email,
+
+        amount:
+            amount * 100,
+
+        currency:
+            "KES",
+
+        metadata:{
+
+            custom_fields:[
+
+                {
+                    display_name:
+                        "Subscription Plan",
+
+                    variable_name:
+                        "subscription_plan",
+
+                    value:
+                        plan
+                }
+
+            ]
+
+        },
+
+
+        onSuccess:
+            function(transaction){
+
+                alert(
+
+                    "🎉 PAYMENT SUCCESSFUL!\n\n" +
+
+                    "Plan: " +
+                    plan +
+
+                    "\nAmount: KES " +
+                    amount +
+
+                    "\nReference: " +
+                    transaction.reference
+
+                );
+
+                console.log(
+                    transaction
+                );
+
+            },
+
+
+        onCancel:
+            function(){
+
+                alert(
+                    "Payment cancelled."
+                );
+
+            },
+
+
+        onError:
+            function(error){
+
+                alert(
+                    "Payment error: " +
+                    error.message
+                );
+
+                console.error(
+                    error
+                );
+
+            }
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
