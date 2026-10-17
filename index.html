@@ -1,0 +1,3588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🏠%3C/text%3E%3C/svg%3E">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WWG — Weird Website Gallery</title>
+    <meta name="description"
+        content="A curated gallery of weird and wonderful websites. Browse unique interactive web experiences.">
+    <meta name="google-site-verification" content="D95t-pXaM6OCEeC_iH75h9i3ysRcK7iq4mhdLLEYLdo" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #050508;
+            --bg-card: #0e0e14;
+            --bg-card-hover: #14141e;
+            --accent: #a78bfa;
+            --accent-glow: rgba(167, 139, 250, 0.25);
+            --pink: #f472b6;
+            --cyan: #22d3ee;
+            --green: #4ade80;
+            --orange: #fb923c;
+            --text: #ededf0;
+            --text-sub: #8888a0;
+            --border: rgba(255, 255, 255, 0.06);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Noise overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 24px 80px;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.05) 0%, transparent 70%);
+            min-height: 450px;
+        }
+
+        #hero-canvas {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            background: rgba(167, 139, 250, 0.1);
+            border: 1px solid rgba(167, 139, 250, 0.15);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 700;
+            letter-spacing: -3px;
+            line-height: 1;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--pink) 50%, var(--cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--text-sub);
+            font-size: 1.05rem;
+            max-width: 500px;
+            margin: 0 auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-count {
+            position: relative;
+            z-index: 1;
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+
+        .hero-count strong {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ── Gallery Grid ── */
+        .gallery {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(167, 139, 250, 0.25);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 0 0 30px var(--accent-glow);
+        }
+
+        .card-preview {
+            height: 190px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-preview-bg {
+            position: absolute;
+            inset: 0;
+            opacity: 0.8;
+        }
+
+        .card-preview-icon {
+            font-size: 56px;
+            position: relative;
+            z-index: 1;
+            filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+        }
+
+        .card-label {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.62rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            z-index: 2;
+        }
+
+        .label-new {
+            background: rgba(74, 222, 128, .15);
+            color: var(--green);
+            border: 1px solid rgba(74, 222, 128, .2);
+        }
+
+        .label-interactive {
+            background: rgba(167, 139, 250, .15);
+            color: var(--accent);
+            border: 1px solid rgba(167, 139, 250, .2);
+        }
+
+        .label-weird {
+            background: rgba(244, 114, 182, .15);
+            color: var(--pink);
+            border: 1px solid rgba(244, 114, 182, .2);
+        }
+
+        .label-chill {
+            background: rgba(34, 211, 238, .15);
+            color: var(--cyan);
+            border: 1px solid rgba(34, 211, 238, .2);
+        }
+
+        .label-search {
+            background: rgba(167, 139, 250, .15);
+            color: var(--accent);
+            border: 1px solid rgba(167, 139, 250, .2);
+        }
+
+        .card-body {
+            padding: 16px 18px 18px;
+        }
+
+        .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            letter-spacing: -0.3px;
+        }
+
+        .card-desc {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-tags {
+            display: flex;
+            gap: 5px;
+        }
+
+        .card-tag {
+            padding: 3px 9px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 100px;
+            font-size: 0.65rem;
+            color: var(--text-sub);
+            font-weight: 500;
+        }
+
+        .card-arrow {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            color: var(--text-sub);
+            flex-shrink: 0;
+        }
+
+        .card:hover .card-arrow {
+            background: var(--accent);
+            color: #fff;
+            transform: translateX(2px);
+        }
+
+        .label-creative {
+            background: rgba(251, 146, 60, .15);
+            color: var(--orange);
+            border: 1px solid rgba(251, 146, 60, .2);
+        }
+
+        .label-game {
+            background: rgba(74, 222, 128, .15);
+            color: var(--green);
+            border: 1px solid rgba(74, 222, 128, .2);
+        }
+
+        /* ── Search & Filters ── */
+        .search-wrap {
+            max-width: 500px;
+            margin: 20px auto 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px 12px 42px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: rgba(167, 139, 250, 0.4);
+            box-shadow: 0 0 20px rgba(167, 139, 250, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-sub);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-sub);
+            font-size: 1rem;
+            pointer-events: none;
+        }
+
+        .vault-btn {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-sub);
+            text-decoration: none;
+            font-size: 1.2rem;
+            line-height: 1;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .vault-btn:hover {
+            color: var(--accent);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .filter-bar {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 16px auto 0;
+            max-width: 700px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .filter-pill {
+            padding: 6px 14px;
+            border-radius: 100px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-sub);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-pill:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text);
+        }
+
+        .filter-pill.active {
+            background: rgba(167, 139, 250, 0.15);
+            border-color: rgba(167, 139, 250, 0.3);
+            color: var(--accent);
+        }
+
+        .filter-count {
+            font-size: 0.78rem;
+            color: var(--text-sub);
+            text-align: center;
+            margin-top: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .filter-count strong {
+            color: var(--accent);
+        }
+
+        /* ── Card animations ── */
+        .card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardIn 0.5s ease forwards;
+        }
+
+        .card.hidden {
+            display: none !important;
+        }
+
+        @keyframes cardIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── Scroll to top ── */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(167, 139, 250, 0.15);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            color: var(--accent);
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            pointer-events: none;
+            backdrop-filter: blur(10px);
+        }
+
+        .scroll-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .scroll-top:hover {
+            background: rgba(167, 139, 250, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Suggest Idea Feature */
+        .suggest-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            padding: 12px 20px;
+            border-radius: 100px;
+            background: rgba(167, 139, 250, 0.15);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            color: var(--accent);
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .suggest-btn:hover {
+            background: rgba(167, 139, 250, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(167, 139, 250, 0.2);
+            color: #fff;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(20px) scale(0.95);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(167, 139, 250, 0.1);
+            position: relative;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--text-sub);
+            font-size: 2rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #fff;
+        }
+
+        .modal h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--pink) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 14px 16px;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .modal-input:focus {
+            border-color: rgba(167, 139, 250, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 15px rgba(167, 139, 250, 0.15);
+        }
+
+        textarea.modal-input {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .modal-submit {
+            width: 100%;
+            padding: 16px;
+            background: rgba(167, 139, 250, 0.15);
+            color: var(--accent);
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: 12px;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .modal-submit:hover {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(167, 139, 250, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* no results */
+        .no-results {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-sub);
+            font-size: 1rem;
+            display: none;
+        }
+
+        .no-results.visible {
+            display: block;
+        }
+
+        .no-results .nr-emoji {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 40px 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-sub);
+            font-size: 0.8rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 60px 16px 36px;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                padding: 0 16px 60px;
+            }
+
+            .filter-bar {
+                padding: 0 16px;
+                gap: 4px;
+            }
+
+            .search-wrap {
+                margin: 16px 16px 0;
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 {
+                font-size: clamp(2.5rem, 12vw, 3.5rem);
+                letter-spacing: -1.5px;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            .suggest-btn {
+                bottom: 20px;
+                left: 20px;
+                right: 20px;
+                justify-content: center;
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+
+            .scroll-top {
+                bottom: 80px;
+                right: 20px;
+                width: 38px;
+                height: 38px;
+            }
+        }
+
+        /* ── Universal Themes (Unlocked by Fragments) ── */
+        body.void-mode {
+            background: #000;
+            --bg: #000;
+            --bg-card: #050505;
+            overflow-x: hidden;
+        }
+        body.void-mode::before {
+            content: ''; position: fixed; inset: 0;
+            background: radial-gradient(circle at center, transparent 0%, #000 80%),
+                        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.01' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)' opacity='0.2'/%3E%3C/svg%3E");
+            animation: void-drift 20s infinite linear;
+            z-index: -1; pointer-events: none;
+        }
+        @keyframes void-drift {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.2) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        body.chaos-mode {
+            --accent: #ff0055;
+            --bg: #0a0005;
+        }
+        body.chaos-mode .card {
+            animation: chaos-jitter 0.1s infinite alternate;
+        }
+        @keyframes chaos-jitter {
+            to { transform: translate(1px, -1px); }
+        }
+
+        body.phantom-mode {
+            filter: grayscale(1) contrast(1.2) invert(0.05);
+        }
+        body.phantom-mode h1 {
+            animation: phantom-flicker 2s infinite;
+        }
+        @keyframes phantom-flicker {
+            0%, 90%, 100% { opacity: 1; }
+            92% { opacity: 0.5; }
+            95% { opacity: 0.8; }
+        }
+        /* ── Economy Bar (User Preferred) ── */
+        .economy-bar {
+            position: sticky; top: 0; z-index: 2000;
+            background: rgba(5,5,8,0.8); backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 10px 20px; display: flex; justify-content: flex-end; align-items: center; gap: 20px;
+            font-family: 'Outfit', sans-serif;
+        }
+        .econ-link { text-decoration: none; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
+        .coin-btn {
+            font-family: 'Share Tech Mono', monospace; color: #ffd700;
+            background: rgba(255, 215, 0, 0.1); padding: 4px 12px;
+            border-radius: 50px; border: 1px solid rgba(255, 215, 0, 0.3); font-size: 0.9rem;
+        }
+        .avatar-btn {
+            padding: 4px 12px; background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 50px;
+        }
+    </style>
+    <script src="economy.js"></script>
+    <script src="discovery.js"></script>
+</head>
+
+<body>
+    <div class="economy-bar">
+        <a href="shop.html" class="econ-link coin-btn">
+            <span>🪙</span> <span class="coin-balance-val">0</span>
+        </a>
+        <a href="avatar.html" id="avatar-btn" class="econ-link avatar-btn">
+            <span id="header-avatar-emoji" style="font-size: 1.2rem;">👾</span>
+            <span id="header-avatar-nick" style="font-size: 0.8rem; font-weight: 600; color: #fff; letter-spacing: 0.5px;">Void_Visitor</span>
+        </a>
+    </div>
+
+    <script>
+        // Sync Avatar and Coins in Header
+        function syncHeader() {
+            const avatarSaved = localStorage.getItem('wwg_avatar_data');
+            if (avatarSaved) {
+                const data = JSON.parse(avatarSaved);
+                document.getElementById('header-avatar-emoji').textContent = data.emoji || '👾';
+                document.getElementById('header-avatar-nick').textContent = data.nickname || 'Void_Visitor';
+                const btn = document.getElementById('avatar-btn');
+                btn.style.borderColor = (data.aura && data.aura !== 'transparent') ? data.aura : 'rgba(255,255,255,0.1)';
+                btn.style.boxShadow = (data.aura && data.aura !== 'transparent') ? `0 0 10px ${data.aura}` : 'none';
+            }
+            if (window.Economy) Economy.updateUI();
+        }
+        window.addEventListener('load', syncHeader);
+        window.addEventListener('economyUpdate', syncHeader);
+    </script>
+    <section class="hero">
+        <canvas id="hero-canvas"></canvas>
+        <span class="hero-badge">✦ Curated Collection</span>
+        <a href="../neo-portfolio/index.html" style="text-decoration: none; color: var(--accent); font-weight: 700; font-size: 0.7rem; letter-spacing: 2px; margin-bottom: 20px; display: block; opacity: 0.6; transition: 0.3s; text-transform: uppercase;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.6">BY NEO</a>
+        <h1><span class="gradient-text" id="wwg-title" style="cursor:pointer;user-select:none;" title="WWG">WWG</span>
+        </h1>
+        <p>Weird Website Gallery — a hand-picked collection of strange, wonderful, and interactive web experiences</p>
+        <div class="hero-count"><strong>120</strong> sites and counting</div>
+        <div class="search-wrap">
+            <span class="search-icon">🔍</span>
+            <input class="search-input" id="search" type="text"
+                placeholder="Search 120 sites by name, description, or tag...">
+            <a href="secret-hub.html" class="vault-btn" title="The Secret Hub">
+                <span class="vault-icon">🔒</span>
+            </a>
+        </div>
+        <div class="filter-bar">
+            <button class="filter-pill active" data-filter="all">All</button>
+            <button class="filter-pill" data-filter="new">✦ New</button>
+            <button class="filter-pill" data-filter="interactive">✦ Interactive</button>
+            <button class="filter-pill" data-filter="weird">✦ Weird</button>
+            <button class="filter-pill" data-filter="game">🎮 Games</button>
+            <button class="filter-pill" data-filter="creative">✨ Creative</button>
+            <button class="filter-pill" data-filter="chill">✦ Chill</button>
+        </div>
+        <div class="filter-count" id="filter-count">Showing <strong>120</strong> of 120 sites</div>
+    </section>
+
+    <main class="gallery">
+        <!-- BATCH 16: VOID CASINO -->
+        <a href="void-slots.html" class="card" data-tags="game interactive gambling new" style="animation-delay: 0.0s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #08040f, #facc15, #8b5cf6);"></div>
+                <span class="card-label label-game">Game</span>
+                <span class="card-preview-icon" style="font-size: 42px; font-weight: 900;">777</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Void Slots</div>
+                <div class="card-desc">A fake-credit skill-stop slot game with timing streaks, luck meter, jackpots, coin bursts, and zero real-money hooks.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">Gambling</span><span class="card-tag">Slots</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+        <!-- BATCH 15: THE META COLLECTION -->
+        <a href="corridor-key.html" class="card" data-tags="creative interactive utility new" style="animation-delay: 0.0s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #050505, #a78bfa);"></div>
+                <span class="card-label label-new">✦ New Tool</span>
+                <span class="card-preview-icon">🔑</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Corridor Key</div>
+                <div class="card-desc">The ultimate chroma key tool. Remove backgrounds and target colors from any image for creative composites.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎬 VFX</span><span class="card-tag">🖌️ Tool</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+        <a href="scandinavian-suffering.html" class="card" data-tags="game weird interactive new" style="animation-delay: 0.1s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #050505, #ff4d00);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">💀</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Number Go Up 💀🇫🇮</div>
+                <div class="card-desc">The Number Go Up simulator. Progress is sabotaged by bureaucracy, assembly, and nature. Premium cursed adventure.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🪑 IKEA</span><span class="card-tag">❄️ February</span><span class="card-tag">🎰 Gamble</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+        <a href="shifting-riddle.html" class="card" data-tags="weird meta creative new" style="animation-delay: 0.05s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0c0c0e, #d4af37);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">📜</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Shifting Riddle</div>
+                <div class="card-desc">A text-based mystery where the truth evolves as you seek it. Solve the meta-cipher.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧩 Puzzle</span><span class="card-tag">📜 Lore</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+
+        <a href="infinite-lore.html" class="card" data-tags="weird chill new" style="animation-delay: 0.07s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #050505, #ff0055);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🏺</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Infinite Lore</div>
+                <div class="card-desc">A procedural archaeology scroll generating never-ending history of the digital void.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🏺 History</span><span class="card-tag">∞ Infinity</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+        <a href="desktop-neo.html" class="card" data-tags="creative meta creative new" style="animation-delay: 0.01s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #050505, #7000ff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🖥️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Neo OS</div>
+                <div class="card-desc">A bespoke desktop environment for the void explorer. Multi-window, interactive, and recursive.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">✨ Meta</span><span class="card-tag">📁 OS</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="recursive.html" class="card" data-tags="weird meta creative new" style="animation-delay: 0.02s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #202124, #5c5cff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🌀</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Recursive Tab</div>
+                <div class="card-desc">A browser within a browser, within a browser. Reach the depth limit of your own mind.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌀 Recursive</span><span class="card-tag">🌐 Web</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="vibe-interceptor.html" class="card" data-tags="interactive weird creative new" style="animation-delay: 0.03s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a0c, #00ff9d);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">📡</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Vibe Interceptor</div>
+                <div class="card-desc">A signal analysis terminal that decodes your frequency anomaly in real-time.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📟 Terminal</span><span class="card-tag">⚡ Vibe</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="glitch-earth.html" class="card" data-tags="weird creative new" style="animation-delay: 0.04s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #000, #ff00ff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🌍</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Glitch Earth</div>
+                <div class="card-desc">An interactive anomaly map. Click to trigger regional failures and reality glitches.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">👾 Glitch</span><span class="card-tag">🛰️ Map</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+        <!-- BATCH 14: THE LEGACY COLLECTION -->
+        <a href="one-second.html" class="card" data-tags="game micro-test new" style="animation-delay: 0.02s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #111, #333, #ff3e3e);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⏱️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">1-Second Reaction</div>
+                <div class="card-desc">The perfectionist's test. Stop the clock at exactly 1.000s. No room for error.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">⚡ Speed</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="odd-emoji.html" class="card" data-tags="game visual puzzle new" style="animation-delay: 0.04s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0f172a, #38bdf8);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🕵️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Find the Odd Emoji</div>
+                <div class="card-desc">A perception speed challenge. One emoji is slightly different. Can you find it?</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">👀 Visual</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="impossible-typing.html" class="card" data-tags="game micro-test typing new" style="animation-delay: 0.06s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #050505, #a78bfa);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⌨️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Impossible Typing</div>
+                <div class="card-desc">Type through a reality glitch. Words rotate, flip, and distort as you try to race the clock.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">🌀 Weird</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="cursor-dodge.html" class="card" data-tags="game reflex survival new" style="animation-delay: 0.08s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #000, #ff0055, #00ff88);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🏹</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Cursor Dodge</div>
+                <div class="card-desc">Survival of the quickest. Avoid relentless tracking blocks in a high-friction void.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">⚡ Reflex</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="boring.html" class="card" data-tags="weird creative chill new" style="animation-delay: 0.1s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #dcdcdc, #dfdfdf);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🪨</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Boringest Website</div>
+                <div class="card-desc">An intentionally uneventful masterpiece. Experience the thrill of absolute beige.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">✨ Creative</span><span class="card-tag">😌 Chill</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="expensive-button.html" class="card" data-tags="weird special premium new" style="animation-delay: 0.12s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #bf953f, #aa771c);"></div>
+                <span class="card-label label-new">💎 Luxury</span>
+                <span class="card-preview-icon">✨</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Expensive Button</div>
+                <div class="card-desc">Experience 100% digital luxury. A button so premium it requires net worth verification.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">💎 Elite</span><span class="card-tag">💰 Rich</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="dont-stop-scrolling.html" class="card" data-tags="weird special creative new" style="animation-delay: 0.14s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #000, #333);"></div>
+                <span class="card-label label-new">💀 Danger</span>
+                <span class="card-preview-icon">📜</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Don't Stop Scrolling</div>
+                <div class="card-desc">A fragile reality. If you stop moving, the void consumes the data. Forever.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">💀 Nightmare</span><span class="card-tag">📜 Text</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="internet-archaeology.html" class="card" data-tags="game discovery weird special new" style="animation-delay: 0s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #000, #064e3b, #00ff41);"></div>
+                <span class="card-label label-new">✨ Special</span>
+                <span class="card-preview-icon">🌌</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Internet Archaeology</div>
+                <div class="card-desc">Explore the ruins of the early web. Discover memes, ancient browsers, and lost data.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📜 History</span><span class="card-tag">🧩 Puzzle</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- BATCH 13: RETENTION EXPERIMENTS -->
+        <a href="find-difference.html" class="card" data-tags="game visual puzzle new" style="animation-delay: 0.02s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0369a1, #38bdf8);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🔍</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Find the Difference</div>
+                <div class="card-desc">Spot tiny anomalies in side-by-side images. Sharp eyes required.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">👀 Visual</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="zoom-wall.html" class="card" data-tags="creative discovery new" style="animation-delay: 0.04s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #4c1d95, #d946ef);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🔎</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Infinite Zoom Wall</div>
+                <div class="card-desc">A giant community canvas. Zoom in forever to find hidden art.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">✨ Creative</span><span class="card-tag">🖼️ Art</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="speed-trainer.html" class="card" data-tags="game micro-test new" style="animation-delay: 0.06s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #991b1b, #f97316);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🎯</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Speed Trainer</div>
+                <div class="card-desc">FPS-style aim and reaction trainer. Track your improvement.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">⚡ Speed</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="guess-song.html" class="card" data-tags="audio game new" style="animation-delay: 0.08s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #312e81, #ec4899);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🎵</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Infinite Song Guess</div>
+                <div class="card-desc">Hear 1 second of a melody. Guess the song in endless mode.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎶 Audio</span><span class="card-tag">🔁 Infinite</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="pixel-reveal.html" class="card" data-tags="game visual puzzle new" style="animation-delay: 0.1s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #064e3b, #22d3ee);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">👾</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Pixel Reveal</div>
+                <div class="card-desc">Identify the object as it emerges from a single pixel.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">👾 Pixels</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="where-is-this.html" class="card" data-tags="game discovery new" style="animation-delay: 0.12s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #134e4a, #0ea5e9);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🌍</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Where Is This?</div>
+                <div class="card-desc">Global geography challenge. Guess the country from a photo.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌍 Discovery</span><span class="card-tag">✈️ Travel</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="memory-speed.html" class="card" data-tags="game chill new" style="animation-delay: 0.14s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #78350f, #fbbf24);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🧠</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Memory Speed</div>
+                <div class="card-desc">Classic card matching challenge with a high-speed timer.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">✦ Chill</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="typing-ninja.html" class="card" data-tags="game arcade new" style="animation-delay: 0.16s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #1e293b, #f43f5e);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🥷</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Typing Ninja</div>
+                <div class="card-desc">Defend against falling words in arcade typing combat.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">⌨️ Typing</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <a href="cursor-levels.html" class="card" data-tags="game micro-test new" style="animation-delay: 0.18s;">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #4c1d95, #db2777);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🖱️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Cursor Maze</div>
+                <div class="card-desc">Navigate precision mazes without touching the walls.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">⚡ Precision</span></div>
+                    <div class="card-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Batch 12: Knowledge & Logic -->
+
+        <!-- Fake Fact Machine -->
+        <a href="fake-facts.html" class="card" data-tags="interactive creative weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0d0d12, #1a1a24 50%, #facc15);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">📜</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Fake Fact Machine</div>
+                <div class="card-desc">Think you know reality? Guess true or false on facts that look like absolute lies. Master the truth.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">💡 Info</span><span class="card-tag">🧠 Logic</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- One Million Checkboxes -->
+        <a href="million-checkboxes.html" class="card" data-tags="interactive creative weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #ffffff, #f0f0f0 50%, #007bff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">☑️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">One Million Checkboxes</div>
+                <div class="card-desc">A collective, infinite grid. Join thousands in the quest to check every single box on the internet.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🤝 Global</span><span class="card-tag">♾️ Infinite</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Life Rarity Calculator -->
+        <a href="life-rarity.html" class="card" data-tags="interactive creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #f8fafc, #ffffff 50%, #6366f1);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🧬</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Life Rarity Calculator</div>
+                <div class="card-desc">How unique are your habits? Compare your daily routine to the global human population index.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📊 Stats</span><span class="card-tag">👤 You</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Strange Wikipedia Button -->
+        <a href="strange-wiki.html" class="card" data-tags="interactive weird creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a1a1a, #000 50%, #fff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🕳️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Strange Wikipedia Button</div>
+                <div class="card-desc">Descend into the rabbit hole. Instantly transport to the most bizarre and unexplained corners of history.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🐇 Hole</span><span class="card-tag">📚 Wiki</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Infinite Photo Wall -->
+        <a href="photo-wall.html" class="card" data-tags="interactive creative chill">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #050505, #111 50%, #fff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🖼️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Infinite Photo Wall</div>
+                <div class="card-desc">A collective canvas of human memory. Upload your photos to a massive, zoomable world of images.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📸 Art</span><span class="card-tag">🎞️ Wall</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Batch 11: Community & Nostalgia -->
+
+
+        <!-- The Global Button -->
+        <a href="global-button.html" class="card" data-tags="interactive creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a0f, #1a0a0f 50%, #ff3e00);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🔘</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Global Button</div>
+                <div class="card-desc">Contribute to the collective counter. Live heatmaps, global milestones, and shared fireworks.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌍 World</span><span class="card-tag">🤝 Join</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Street View Guess -->
+        <a href="map-guess.html" class="card" data-tags="game interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #111, #222 50%, #34d399);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">📍</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Street View Guess</div>
+                <div class="card-desc">Mini GeoGuessr. Identify random global locations from Street View embeds. Speed and accuracy matter.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🗺️ Maps</span><span class="card-tag">🏆 Pro</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Weirdness Test -->
+        <a href="weird-test.html" class="card" data-tags="interactive creative weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #ffefd5, #fff 50%, #ff69b4);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🌀</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">How Weird Are You?</div>
+                <div class="card-desc">A psychological scale for the unusual. Are you a Normal Human or an Interdimensional Goblin?</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🛸 Alien</span><span class="card-tag">🧪 Test</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Nostalgia Machine -->
+        <a href="nostalgia-machine.html" class="card" data-tags="interactive weird creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000, #333 50%, #007bff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">💾</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Nostalgia Machine</div>
+                <div class="card-desc">Travel back to the early web. Revisit the aesthetic of 1995, 2004, and 2008 with immersive UI shifts.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📼 Retro</span><span class="card-tag">🕰️ Time</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Batch 10: Viral & Competitive -->
+
+        <!-- Character Identity Test -->
+        <a href="character-test.html" class="card" data-tags="interactive creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #030712, #111827 50%, #8b5cf6);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🎭</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Internet Character Test</div>
+                <div class="card-desc">Answer 10 psychological questions to find your true digital persona. Chaos Goblin or Silent Lurker?</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧠 Profile</span><span class="card-tag">✨ Viral</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Life Online Calculator -->
+        <a href="life-online.html" class="card" data-tags="interactive utility">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000, #0a0a0a 50%, #3b82f6);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⌛</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Life Online Calculator</div>
+                <div class="card-desc">Visualize exactly how many years of your life have been consumed by the internet. A digital reality check.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📊 Stats</span><span class="card-tag">💀 Heavy</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- AI vs Real Images -->
+        <a href="ai-vs-real.html" class="card" data-tags="game interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000, #111 50%, #00ff88);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">👁️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">AI vs Real Images</div>
+                <div class="card-desc">Can you spot the difference? Test your ability to detect AI generation across 10 side-by-side challenges.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🤖 AI</span><span class="card-tag">🎮 Game</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Boredom Button -->
+        <a href="boredom-button.html" class="card" data-tags="weird interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000, #111 50%, #fff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⚪</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Boredom Button</div>
+                <div class="card-desc">Pure digital escapism. One click opens a random, hand-picked weird corner of the internet.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌀 Random</span><span class="card-tag">🎁 Surprise</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- New Interactive Batch March 2026 -->
+
+        <!-- Internet IQ Test -->
+        <a href="internet-iq.html" class="card" data-tags="interactive creative weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #050505, #111 50%, #a78bfa);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🧠</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Internet IQ Test</div>
+                <div class="card-desc">Calculate your digital intelligence. A fake personality assessment for the chronically online.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📊 Stats</span><span class="card-tag">🤡 Meme</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Human Benchmark Map -->
+        <a href="human-benchmark.html" class="card" data-tags="interactive game">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a0f, #161625 50%, #34d399);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⚡</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Human Benchmark Map</div>
+                <div class="card-desc">Test your reaction time, memory, and typing speed against global averages.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌎 Global</span><span class="card-tag">📈 Performance</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Tab Destroyer -->
+        <a href="tab-destroyer.html" class="card" data-tags="weird interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000, #331111 50%, #ff0000);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">💥</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Tab Destroyer</div>
+                <div class="card-desc">One click, absolute chaos. Opens a floodgate of the internet’s strangest URLs simultaneously.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⚠️ Warning</span><span class="card-tag">🌀 Chaos</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Guess The Price -->
+        <a href="guess-price.html" class="card" data-tags="interactive game">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0f172a, #1e293b 50%, #f59e0b);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">💰</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Guess The Price</div>
+                <div class="card-desc">Think you know the value of weird objects? A high-stakes guessing game for internet artifacts.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">💎 Rare</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Daily Life Challenge -->
+        <a href="life-challenge.html" class="card" data-tags="chill creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #fafafa, #f1f5f9 50%, #10b981);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🌿</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Daily Life Challenge</div>
+                <div class="card-desc">One weird, real-world task every single day. A tool designed to get you off the internet.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📵 Detox</span><span class="card-tag">☀️ Real Life</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Getting Weirder -->
+        <a href="getting-weirder.html" class="card" data-tags="weird interactive creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #fff, #eee 50%, #000);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🌀</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Weirder Site</div>
+                <div class="card-desc">A website that perpetually evolves. The longer you stay, the more the reality of the page breaks.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⏳ Time</span><span class="card-tag">💀 Nightmare</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Skill Generator -->
+        <a href="skill-gen.html" class="card" data-tags="chill creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #030712, #111827 50%, #6366f1);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🛠️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Random Skill Generator</div>
+                <div class="card-desc">Discover your next obsession. Generates rare skills to learn with quick tutorial paths.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📚 Learn</span><span class="card-tag">✨ Skills</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+
+        <!-- Name Rarity -->
+        <a href="name-rarity.html" class="card" data-tags="creative interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0f121a, #1a1e2e 50%, #3b82f6);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">📊</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">How Rare Is Your Name?</div>
+                <div class="card-desc">A deep data visualizer that calculates your name's rarity and global distribution.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📈 Data</span><span class="card-tag">🌐 Global</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Mouse Accuracy -->
+        <a href="mouse-accuracy.html" class="card" data-tags="interactive game">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000, #111 50%, #ff0050);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🎯</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Mouse Accuracy Trainer</div>
+                <div class="card-desc">A precision-focused training ground to improve your clicks per minute and accuracy.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⚡ Reflex</span><span class="card-tag">🎮 Gamer</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+
+        <!-- Abref -->
+        <a href="abref.html" class="card" data-tags="tool creative weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a0a, #1a1a1a 50%, #00f3ff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⌨️✨</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Abref</div>
+                <div class="card-desc">Turn any abbreviation into a weirdly specific backronym. 🌀</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎨 Creative</span><span class="card-tag">🌀 Weird</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Skill Issue 3.0 -->
+        <a href="skill-issue.html" class="card" data-tags="game chaos intervention household 3.0">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a0a, #ff6600 50%, #ff0000);"></div>
+                <span class="card-label label-new">✦ 3.0 Sabotage</span>
+                <span class="card-preview-icon">🎯🔩🍲</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Skill Issue 3.0</div>
+                <div class="card-desc">"Household Sabotage" edition. Now with IKEA furniture assembly and cooking chores. Total Scandinavian Suffering.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⚡ Sabotage</span><span class="card-tag">🎲 Chaos</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- New Batch April 2026 -->
+
+        <!-- Void Timer -->
+        <a href="void-timer.html" class="card" data-tags="weird chill interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #04040a, #1a0a40 50%, #5533ff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⏳</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Void Timer</div>
+                <div class="card-desc">A timer that counts up forever. Reset adds 10 seconds. You cannot win. Whispers are included.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🕳️ Void</span><span class="card-tag">💀 Cursed</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Keyboard Smash Analyzer -->
+        <a href="keyboard-smash.html" class="card" data-tags="weird interactive creative">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0d0d0d, #1a1a1a 50%, #ff6600);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⌨️💥</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Keyboard Smash Analyzer</div>
+                <div class="card-desc">Smash your keyboard. We'll analyze your emotional state, chaos score, and what's wrong with you.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🔬 Analysis</span><span class="card-tag">💀 Roast</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Liar's Clicker -->
+        <a href="liars-clicker.html" class="card" data-tags="weird game interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a0a, #1a1a1a 50%, #ff3355);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🖱️🤥</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Liar's Clicker</div>
+                <div class="card-desc">A clicker game that lies about your score. Numbers shift when you look away. Nothing is real.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">🤥 Lies</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Neon Fluid -->
+        <a href="neon-fluid.html" class="card" data-tags="interactive creative chill art">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #000, #0a0020 50%, #00ffcc);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🌊✨</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Neon Fluid</div>
+                <div class="card-desc">Move your mouse to paint glowing rivers of neon light across a dark canvas. Interactive fluid art.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎨 Art</span><span class="card-tag">✨ Glow</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Star Map -->
+        <a href="star-map.html" class="card" data-tags="interactive creative chill space">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #02020a, #0a0a1e 50%, #4455ff);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">⭐🗺️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Star Map</div>
+                <div class="card-desc">A procedural drifting starfield. Click to name stars. Hover for absurd, made-up stellar facts.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌌 Space</span><span class="card-tag">🔭 Stars</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- The Bad News Machine -->
+        <a href="bad-news.html" class="card" data-tags="weird interactive creative">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #080808, #111 50%, #555);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">📰💀</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Bad News Machine</div>
+                <div class="card-desc">Delivers absurdly mundane misfortune. "Your left sock is 0.3% more worn than your right." Escalates.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">😔 Cursed</span><span class="card-tag">📡 Report</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- New Interactive Batch Feb 2026 -->
+
+
+
+        <!-- Sound Painter -->
+        <a href="sound-painter.html" class="card" data-tags="interactive creative music">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000, #222 50%, #4ade80);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🎨</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Sound Painter</div>
+                <div class="card-desc">Paint music on a digital canvas. Each color produces a unique instrument sound.
+                    Drag to create abstract audiovisual loops.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎵 Audio</span><span class="card-tag">🖌️ Art</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- AI Insult Generator -->
+        <a href="insult-generator.html" class="card" data-tags="weird creative">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #2d2417, #5c4a30 50%, #facc15);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">📜</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Shakespearean Insult Gen</div>
+                <div class="card-desc">Generate dramatic, historically accurate Shakespearean insults. "Thou soggy
+                    cabbage of intellectual despair!"</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎭 Drama</span><span class="card-tag">✍️ Text</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+
+        <!-- Decision Wheel -->
+        <a href="decision-wheel.html" class="card" data-tags="weird interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1b1b2f, #0a0a10 50%, #f472b6);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🎡</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Twisted Decision Wheel</div>
+                <div class="card-desc">Spin for answers, but beware: the longer you hesitate, the more the wheel pushes
+                    towards "NEVER" and "MAYBE".</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎲 Luck</span><span class="card-tag">⏳ Time</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- The Dumbionary -->
+        <a href="dumb-dictionary.html" class="card" data-tags="weird community interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #fffcf0, #ff6b6b 50%, #ffe66d);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🤪</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Dumbionary</div>
+                <div class="card-desc">A community dictionary of dumb words. Everyone can add new words and definitions. "Oitama" or bust!</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📖 Words</span><span class="card-tag">🤪 Dumb</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Dumb Tech Speedruns -->
+        <a href="speedrun.html" class="card" data-tags="game weird interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #050a05, #001a00 50%, #00ff41);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🏁</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Dumb Tech Speedruns</div>
+                <div class="card-desc">Simulate chaotic tech actions as a speedrun. Choose a category, race the clock, and earn a rank: Safe User to Tech Necromancer.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⚡ Chaos</span><span class="card-tag">🎮 Game</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7" /></svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Stress Button -->
+        <a href="stress-button.html" class="card" data-tags="chill weird interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #111, #222 50%, #ff3333);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">💥</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Stress Button</div>
+                <div class="card-desc">Huge red button for dopamine release. Press for chaotic explosions and calming
+                    quotes when you just need a break.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">😌 Zen</span><span class="card-tag">🧨 Action</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Cursor Gravity -->
+        <a href="cursor-gravity.html" class="card" data-tags="interactive creative physics">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #020205, #0a0a14 50%, #60a5fa);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🪐</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Gravity Well Simulator</div>
+                <div class="card-desc">Your cursor is a massive celestial body. Pull planets, moons, and space rocks
+                    into complex orbital patterns.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌌 Space</span><span class="card-tag">🧪
+                            Physics</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- 90s Web Gen -->
+        <a href="90s-gen.html" class="card" data-tags="weird creative retro">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #c0c0c0, #808080 50%, #000080);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">📟</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">1998 Website Generator</div>
+                <div class="card-desc">Generate authentic Geocities-era pages. Marquees, blink tags, hit counters, and
+                    "Under Construction" GIFs.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">💾 Retro</span><span class="card-tag">🌐 Web</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Million Clicks -->
+        <a href="million-clicks.html" class="card" data-tags="weird interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #050505, #111 50%, #facc15);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🖱️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Million Click Project</div>
+                <div class="card-desc">A global collective effort to reach 1,000,000 clicks. Contribute to the live
+                    aggregate and earn ranks.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">👥 Social</span><span class="card-tag">📈 Live</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Keyboard Piano -->
+        <a href="keyboard-piano.html" class="card" data-tags="interactive creative music">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a0c, #1a1a1e 50%, #f472b6);"></div>
+                <span class="card-label label-new">✦ New</span>
+                <span class="card-preview-icon">🎹</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Virtual Keyboard Piano</div>
+                <div class="card-desc">Turn your computer keyboard into a high-fidelity synthesizer. Full octave range
+                    with polyphonic support and visual feedback.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎵 Music</span><span class="card-tag">💻 Tech</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+
+
+        <!-- Digital Theremin -->
+        <a href="digital-theremin.html" class="card" data-tags="interactive creative chill">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #09090b, #115e59 50%, #000000);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🎶</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Digital Theremin</div>
+                <div class="card-desc">A browser-based synthesizer. Move your mouse along the X and Y axes to control
+                    pitch and volume, just like a real theremin!</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎵 Audio</span><span class="card-tag">🎛️ Synth</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- DVD Simulator -->
+        <a href="dvd-logo.html" class="card" data-tags="interactive chill weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #050505, #1f1f1f 50%, #000000);"></div>
+                <span class="card-label label-chill">✦ Chill</span>
+                <span class="card-preview-icon">💽</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">DVD Simulator</div>
+                <div class="card-desc">The legendary DVD logo screensaver. Adjust speed and size to try and force that
+                    satisfying, elusive perfect corner hit.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🖥️ Retro</span><span class="card-tag">⏱️
+                            Waiting</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Planet Forge -->
+        <a href="planet-generator.html" class="card" data-tags="interactive creative chill weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #09090b, #1e3a8a 50%, #000000);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">🌍</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Planet Forge</div>
+                <div class="card-desc">Generate explorable 3D worlds. Adjust sea level, temperature, and moisture to
+                    procedurally create billions of unique planets.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧊 3D</span><span class="card-tag">🎲 ProcGen</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Gravity Sandbox Fluid -->
+        <a href="gravity-sandbox.html" class="card" data-tags="interactive creative chill">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0d0c13, #151a2e 50%, #000000);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🪐</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Gravity Sandbox</div>
+                <div class="card-desc">A fluid dynamics toys box. Spawn physical water, sand, lava, and acid particles,
+                    and manipulate gravity vectors to watch them react.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧪 Physics</span><span class="card-tag">🎨
+                            Canvas</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Markov Chain Text Masher -->
+        <a href="markov-masher.html" class="card" data-tags="creative weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a0520, #0d0815 50%, #08051a);"></div>
+                <span class="card-label label-creative">✨ Creative</span>
+                <span class="card-preview-icon">📰</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Markov Chain Text Masher</div>
+                <div class="card-desc">A statistical N-Gram text generator. Provide it with source text and it will
+                    hallucinate entirely new, algorithmically-mashed paragraphs in the same style.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🤖 AI</span><span class="card-tag">✍️ Text</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Boids Flock Simulation -->
+        <a href="boids.html" class="card" data-tags="interactive creative weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a14, #0d0d1a 50%, #0a1020);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🦆</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Boids Flock Simulation</div>
+                <div class="card-desc">An artificial life interactive simulation rendering emergent flocking behaviors.
+                    Adjust separation, alignment, and cohesion weights or spawn a predator!</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧪 Physics</span><span class="card-tag">🤖 AI</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Gravity Playground -->
+        <a href="gravity-playground.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000010, #0a0a20 50%, #100828);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🌌</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Gravity Playground</div>
+                <div class="card-desc">Create your own universe. Place stars, planets, moons, and black holes — watch
+                    them orbit and collide.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🪐 Physics</span><span class="card-tag">✨
+                            Simulation</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Color Piano -->
+        <a href="color-piano.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a0520, #0d0815 50%, #08051a);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">🎹</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Color Piano</div>
+                <div class="card-desc">A synesthetic piano where every note is a color. Play melodies and watch the
+                    screen ripple with light.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎵 Music</span><span class="card-tag">🌈
+                            Colors</span><span class="card-tag">🎨 Visual</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Harmonograph Simulator -->
+        <a href="harmonograph.html" class="card" data-tags="interactive creative chill">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a14, #0d0d1a 50%, #0a1020);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🎡</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Harmonograph Simulator</div>
+                <div class="card-desc">Simulate mathematical double pendulums tracing mesmerizing Lissajous curves on a
+                    drawing canvas. Save your generative art patterns as PNGs.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📐 Math</span><span class="card-tag">🎨
+                            Generative</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Vaporwave City Drive -->
+        <a href="vaporwave.html" class="card" data-tags="interactive creative game">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a0520, #0d0815 50%, #08051a);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">🌇🏎️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Vaporwave City Drive</div>
+                <div class="card-desc">Cruise through an endless, procedurally generated neon wireframe landscape. Steer
+                    with Arrow Keys in this 3D synthwave aesthetic runner built on Three.js.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">🧊 3D</span><span
+                            class="card-tag">🎶 Synthwave</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Mandelbrot Deep Zoom -->
+        <a href="mandelbrot.html" class="card" data-tags="interactive math art">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #050508, #0e0e14 50%, #a78bfa);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🧫</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Mandelbrot Deep Zoom</div>
+                <div class="card-desc">Infinite mathematical beauty. Deep zoom into the fractal boundary by clicking.
+                    Powered by multi-threading Web Workers for smooth high-res rendering.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧮 Math</span><span class="card-tag">🌀 Fractal</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Sorting Algorithm Visualizer -->
+        <a href="sorting-visualizer.html" class="card" data-tags="interactive education utility">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1e1e2e, #2a2a3c 50%, #89b4fa);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">📊</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Sorting Visualizer</div>
+                <div class="card-desc">Watch five distinct computer sorting algorithms (Bubble, Selection, Insertion,
+                    Merge, Quick) operate on an array of bars in real-time.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">💻 CS</span><span class="card-tag">📊 Stats</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Retro Password Cracker -->
+        <a href="password-cracker.html" class="card" data-tags="interactive creative fun">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #050505, #001a0a 50%, #00ff41);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">☠️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Retro Password Cracker</div>
+                <div class="card-desc">Feel like a Hollywood hacker. Type in a target payload and initiate a brute-force
+                    decryption protocol with glowing CRT scanlines.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🔓 Hacking</span><span class="card-tag">📟
+                            Retro</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Sine Wave Ocean -->
+        <a href="sine-wave-ocean.html" class="card" data-tags="interactive creative chill">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #ff7e5f, #feb47b 50%, #ff6a00);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🌊</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Sine Wave Ocean</div>
+                <div class="card-desc">Meditative interactive waves powered by sine math. Customize layers, speed, and
+                    amplitude for a procedural sunset seascape.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧮 Math</span><span class="card-tag">🎨 Art</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Lissajous Curve Drawer -->
+        <a href="lissajous-drawer.html" class="card" data-tags="interactive creative math">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0b0e14, #141923 50%, #00ffcc);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🪐</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Lissajous Curve Drawer</div>
+                <div class="card-desc">Visualize the harmonic intersection of two perpendicular sine waves. Control X/Y
+                    frequencies, phase shifts, and rotation to create complex orbital patterns.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧮 Math</span><span class="card-tag">🎨 Art</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Cellular Automata (Conway's UI) -->
+        <a href="cellular-automata.html" class="card" data-tags="interactive science">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #050505, #111 50%, #00ff66);">
+                </div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🧫</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Conway's UI</div>
+                <div class="card-desc">A bio-digital simulation of emergent life. Draw patterns on the grid and watch
+                    them evolve, replicate, or die based on cellular rules.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧬 Biology</span><span class="card-tag">🤖 AI</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Emoji Physics Drop -->
+        <a href="emoji-physics.html" class="card" data-tags="interactive game physics">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #121212, #1a1a1a 50%, #ffcc00);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">🎾</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Emoji Physics</div>
+                <div class="card-desc">A physics sandox where you can drop, throw, and burst a variety of emojis.
+                    Powered
+                    by Matter.js for high-fidelity collisions and gravity effects.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🚀 Physics</span><span class="card-tag">😂 Fun</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Audio Visualizer (Microphone) -->
+        <a href="audio-visualizer.html" class="card" data-tags="interactive creative music">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #000, #111 50%, #ff00ff);">
+                </div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🎤</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Audio Visualizer</div>
+                <div class="card-desc">Transform your microphone input into light. Real-time frequency analysis with
+                    multiple visualization modes: Bars, Circles, and Waveforms.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎶 Music</span><span class="card-tag">🎨 Art</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Neon Clock -->
+        <a href="neon-clock.html" class="card" data-tags="interactive chill utility">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #050510, #0a0a1a 50%, #ff006e);"></div>
+                <span class="card-label label-chill">✦ Chill</span>
+                <span class="card-preview-icon">🕐</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Neon Clock</div>
+                <div class="card-desc">A glowing analog + digital clock with smooth second-hand animation and 6 neon
+                    color themes. Pure canvas rendering.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⏰ Time</span><span class="card-tag">✨ Neon</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Rain Simulator -->
+        <a href="rain-simulator.html" class="card" data-tags="interactive chill ambient">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a1a, #0f1020 50%, #6ea8fe);"></div>
+                <span class="card-label label-chill">✦ Chill</span>
+                <span class="card-preview-icon">🌧️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Rain Simulator</div>
+                <div class="card-desc">Atmospheric rain on a window pane with adjustable intensity, wind, lightning
+                    flashes, and procedural thunder audio.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌧️ Weather</span><span class="card-tag">😌
+                            Zen</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Infinite Tunnel -->
+        <a href="infinite-tunnel.html" class="card" data-tags="interactive creative trippy">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #000, #0a0020 50%, #a78bfa);">
+                </div>
+                <span class="card-label label-weird">✦ Trippy</span>
+                <span class="card-preview-icon">🕳️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Infinite Tunnel</div>
+                <div class="card-desc">Fly through a mesmerizing procedural tunnel. 4 color modes: Neon, Rainbow,
+                    Matrix, Fire. Mouse controls your perspective.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌀 Trippy</span><span class="card-tag">🎮
+                            Interactive</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Retro Boot Screen -->
+        <a href="retro-boot.html" class="card" data-tags="interactive weird retro">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #000, #000080 50%, #000);">
+                </div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">💾</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Retro Boot Screen</div>
+                <div class="card-desc">Relive the nostalgia of booting up a classic PC. Choose from Windows 95, MS-DOS,
+                    Linux server, or trigger a BSOD.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">💾 Retro</span><span class="card-tag">📟
+                            Nostalgia</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- ASCII Cam -->
+        <!-- Memory Matrix -->
+        <a href="memory-matrix.html" class="card" data-tags="interactive game">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #07070f, #1a003d 50%, #a78bfa);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">🧠</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Memory Matrix</div>
+                <div class="card-desc">Simon Says meets neon nightclub. Watch the sequence light up, then repeat it
+                    back. Gets cruelly longer each round.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Game</span><span class="card-tag">🧠 Memory</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Sand Simulator -->
+        <a href="sand-sim.html" class="card" data-tags="interactive creative physics">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0805, #1a1005 50%, #e8c46a);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🏖️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Sand Simulator</div>
+                <div class="card-desc">Pour sand, water, oil, fire, and smoke. Watch them pile up, flow, and combust in
+                    real-time pixel physics.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⚗️ Physics</span><span class="card-tag">🎨
+                            Creative</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Signal Interceptor -->
+        <a href="signal-interceptor.html" class="card" data-tags="weird interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #020a04, #041408 50%, #00ff99);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">📡</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Signal Interceptor</div>
+                <div class="card-desc">A glowing retro oscilloscope decoding intercepted transmissions. Adjust
+                    frequency, gain, and wave type to reveal hidden messages.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📡 Radio</span><span class="card-tag">🔍 Spy</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Basketball -->
+        <a href="basketball.html" class="card" data-tags="game interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a0500, #3a1000 50%, #f59e0b);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">🏀</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Basketball</div>
+                <div class="card-desc">Hit the power bar in the green zone to sink the shot. Build streaks and survive
+                    increasing speed. Nothing but net.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🏀 Sports</span><span class="card-tag">⏱️
+                            Timing</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Football Kick -->
+        <a href="football-kick.html" class="card" data-tags="game interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #001a0a, #003318 50%, #22c55e);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">⚽</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Football Kick</div>
+                <div class="card-desc">Drag and release the ball to take a penalty shot. The goalkeeper dives — can you
+                    score?</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⚽ Football</span><span class="card-tag">👆
+                            Swipe</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Meteor Shooter -->
+        <a href="meteor-shooter.html" class="card" data-tags="game interactive">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #000010, #00001a 50%, #7c3aed);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">☄️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Meteor Shooter</div>
+                <div class="card-desc">Defend your ship against endless meteor waves. Earn credits, buy upgrades, and
+                    survive as long as you can.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🚀 Space</span><span class="card-tag">⚡
+                            Upgrades</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Dice Roller Extreme -->
+        <a href="dice-roller.html" class="card" data-tags="interactive game utility">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0608, #1a0a00 50%, #f97316);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">🎲</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Dice Roller Extreme</div>
+                <div class="card-desc">Roll d4 through d100 with crits, fumbles, confetti explosions, and a full
+                    history. Right-click dice to remove them.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎲 Dice</span><span class="card-tag">🐉 RPG</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- ASCII Cam -->
+        <a href="ascii-cam.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #001a0a, #0a0f0d 50%, #041a14);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🖥️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">ASCII Cam</div>
+                <div class="card-desc">Your webcam rendered as real-time ASCII art. Multiple character sets, color
+                    modes, and resolutions.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📷 Webcam</span><span class="card-tag">▓ ASCII</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+        <!-- Glitch Text Generator -->
+        <a href="glitch-text.html" class="card" data-tags="utility weird">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0d001a, #1a0033 50%, #ff00ff);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">🔠</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Glitch Text Generator</div>
+                <div class="card-desc">Corrupt your text into unreadable digital chaos. Multiple intensity levels and
+                    Zalgo-style overflow.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🔠 Text</span><span class="card-tag">🌀 Glitch</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+        </a>
+
+        <!-- Type Racer -->
+        <a href="type-racer.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a1008, #0d0d1a 50%, #1a0a00);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">⌨️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Type Racer</div>
+                <div class="card-desc">Test your typing speed with famous quotes. Real-time WPM, accuracy tracking, and
+                    character highlighting.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⌨️ Typing</span><span class="card-tag">⚡ Speed</span>
+                    </div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Pixel Canvas -->
+        <a href="pixel-canvas.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0d0814, #0a0a14 50%, #140a18);"></div>
+                <span class="card-label label-weird">✦ Creative</span>
+                <span class="card-preview-icon">🎨</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Pixel Canvas</div>
+                <div class="card-desc">Draw pixel art on a grid canvas with pen, fill, and eraser tools. Export your
+                    creations as PNG.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎨 Art</span><span class="card-tag">🖌️
+                            Draw</span><span class="card-tag">💾 Export</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Ambient Sounds -->
+        <a href="ambient-sounds.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #041210, #080810 50%, #041a14);"></div>
+                <span class="card-label label-chill">✦ Chill</span>
+                <span class="card-preview-icon">🌿</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Ambient Sounds</div>
+                <div class="card-desc">Mix nature sounds for focus or sleep. Rain, ocean, fire, birds, wind — layer them
+                    with a sleep timer.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌧️ Nature</span><span class="card-tag">😴
+                            Sleep</span><span class="card-tag">🎧 Audio</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Soup Oracle -->
+        <a href="soup-oracle.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a1005, #0c0905 50%, #1a0e04);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">🍲</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Soup Oracle</div>
+                <div class="card-desc">A random soup recipe generator inspired by The Tale of Despereaux. Brew enchanted
+                    soups with watercress, garlic, and wonder.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🍲 Food</span><span class="card-tag">📖
+                            Story</span><span class="card-tag">🎲 Random</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Dessert Oracle -->
+        <a href="dessert-oracle.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a0510, #0a050a 50%, #1a0815);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">🧁</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Dessert Oracle</div>
+                <div class="card-desc">Conjure random dessert recipes — from Midnight Matcha Soufflé to Velvet Lavender
+                    Panna Cotta. Let her cook.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🍰 Dessert</span><span class="card-tag">✨
+                            Random</span><span class="card-tag">👩‍🍳 Vibe</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        </a>
+
+        <a href="gravity-text.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0f0828, #08080f 50%, #140a20);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🔤</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Gravity Text</div>
+                <div class="card-desc">Type words and watch them fall with real physics. Drag letters, fling them,
+                    explode words, or shake the whole screen.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎮 Physics</span><span class="card-tag">🔤
+                            Text</span><span class="card-tag">💥 Fun</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+
+        <!-- Terrain Generator -->
+        <a href="terrain-gen.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #041a0a, #06080c 50%, #0a1210);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🌍</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Terrain Generator</div>
+                <div class="card-desc">Generate procedural worlds with noise math. 5 biomes, adjustable terrain params,
+                    and PNG export.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🌍 Worlds</span><span class="card-tag">🎲
+                            Procedural</span><span class="card-tag">💾 Export</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Useless Button Museum -->
+        <a href="useless-buttons.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a0828, #0a0810 50%, #18041a);"></div>
+                <span class="card-label label-weird">✦ Dumb</span>
+                <span class="card-preview-icon">🙄</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Useless Button Museum</div>
+                <div class="card-desc">10 buttons that do nothing useful. Flip gravity, embrace darkness, clone buttons,
+                    and waste your time beautifully.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">😂 Dumb</span><span class="card-tag">🎮
+                            Interactive</span><span class="card-tag">🎉 Fun</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+
+        <!-- Excuse Generator -->
+        <a href="excuse-generator.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a1810, #14120a 50%, #1a150a);"></div>
+                <span class="card-label label-weird">✦ Dumb</span>
+                <span class="card-preview-icon">⚖️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Excuse Generator</div>
+                <div class="card-desc">Generate absurdly professional excuses for being late, skipping meetings, or not
+                    texting back.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">📝 Formal</span><span class="card-tag">🤥
+                            Lies</span><span class="card-tag">😂 Dumb</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Emotional Cursor -->
+        <a href="emotional-cursor.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0f0828, #0a0818 50%, #140a24);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">💜</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Emotional Support Cursor</div>
+                <div class="card-desc">Your cursor has feelings. It compliments you, panics when you go fast, and cries
+                    when you leave.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🥺 Feelings</span><span class="card-tag">🖥️
+                            Cursor</span><span class="card-tag">💜 Cute</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Dog Dress Up -->
+        <a href="dog-dress-up.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #1a1505, #14100a 50%, #1a1208);"></div>
+                <span class="card-label label-interactive">✦ Interactive</span>
+                <span class="card-preview-icon">🐶</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Dog Dress Up</div>
+                <div class="card-desc">Dress up a pup with 50+ accessories — hats, glasses, capes, outfits. Name it.
+                    Love it.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🐶 Cute</span><span class="card-tag">🎮
+                            Game</span><span class="card-tag">🎨 Dress Up</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Toothless Dance -->
+        <a href="toothless-dance.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg"
+                    style="background: linear-gradient(135deg, #0a0a1a, #1a1a2e 50%, #0f0528);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">🐉</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Toothless Dance Party</div>
+                <div class="card-desc">He will dance forever. There is no stopping him. Disco ball, speed controls, pure
+                    dragon vibes.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🕺 Dance</span><span class="card-tag">🐉
+                            Dragon</span><span class="card-tag">♾️ Forever</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Invisible Maze -->
+        <a href="invisible-maze.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a1a, #1e1b4b);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">👻</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Invisible Maze</div>
+                <div class="card-desc">Navigate a maze you can't see. Walls only appear when you slam into them. Good
+                    luck.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">👻 Invisible</span><span class="card-tag">🧩
+                            Puzzle</span><span class="card-tag">🧠 Hard</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Catch The Button -->
+        <a href="catch-button.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a1a, #1a0a2e);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">🖱️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Catch The Button</div>
+                <div class="card-desc">Try to click a button that really doesn't want to be clicked. Catch it and it
+                    splits into two.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🏃 Chase</span><span class="card-tag">🤯
+                            Chaos</span><span class="card-tag">♾️ Endless</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Rock Paper Nothing -->
+        <a href="rock-paper-nothing.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0f172a, #1e1b4b);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">✊</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Rock Paper Nothing</div>
+                <div class="card-desc">A totally fair RPS game. The CPU always plays nothing. You always win. 100% win
+                    rate guaranteed.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🏆 Easy Win</span><span class="card-tag">🤣
+                            Dumb</span><span class="card-tag">✨ Fair</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Floor is Lava -->
+        <a href="floor-is-lava.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #1a0a0a, #7f1d1d);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">🌋</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">The Floor is Lava</div>
+                <div class="card-desc">Your cursor IS lava. Everything it touches burns away forever. Try to destroy the
+                    whole page.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🔥 Destructive</span><span class="card-tag">🪨
+                            Satisfying</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+
+        <!-- Compliment Machine -->
+        <a href="compliment-machine.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #831843, #4c1d95);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">💖</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Compliment Machine</div>
+                <div class="card-desc">Endless compliments at 4 intensity levels. From nice to cosmically unhinged. You
+                    deserve this.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">💖 Wholesome</span><span class="card-tag">🤪
+                            Unhinged</span><span class="card-tag">✨ Serotonin</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Pixel War -->
+        <a href="pixel-war.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a1a, #1e1b4b);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">⚔️</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Pixel War</div>
+                <div class="card-desc">5 teams of colored pixels fight for territory. Pick a side, paint soldiers, watch
+                    the chaos unfold.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">⚔️ Battle</span><span class="card-tag">🎨
+                            Pixels</span><span class="card-tag">🔥 Chaos</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Don't Press Space -->
+        <a href="dont-press-space.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a1a, #1a0020);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">🚨</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Don't Press Space</div>
+                <div class="card-desc">Just don't press the spacebar. That's it. The game will try to make you. How long
+                    can you resist?</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🧠 Willpower</span><span class="card-tag">😈
+                            Tempting</span><span class="card-tag">⏱️ Timer</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Cookie But Worse -->
+        <a href="cookie-but-worse.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #1a0f00, #0a0a1a);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">🍪</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Cookie Clicker But Worse</div>
+                <div class="card-desc">Click the cookie. Every click makes it smaller. Can you click a subatomic cookie?
+                </div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🍪 Cookie</span><span class="card-tag">🔬
+                            Tiny</span><span class="card-tag">🤯 Pointless</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Reaction Lies -->
+        <a href="reaction-lies.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a1a, #001a1a);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">⚡</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Reaction Test (It Lies)</div>
+                <div class="card-desc">A normal reaction test. Except it always lies about your results. Negative time?
+                    404ms? Sure.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🤥 Lies</span><span class="card-tag">⚡
+                            Reflexes</span><span class="card-tag">🤣 Dumb</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Fake Loading -->
+        <a href="fake-loading.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a1a, #1a1a2e);"></div>
+                <span class="card-label label-weird">✦ Weird</span>
+                <span class="card-preview-icon">⏳</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Fake Loading Screen</div>
+                <div class="card-desc">An eternal loading screen. It will never, ever reach 100%. Sometimes it goes
+                    backwards. Sometimes it crashes.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">♾️ Eternal</span><span class="card-tag">😤
+                            Frustrating</span><span class="card-tag">🖥️ Meta</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <!-- Draw But Badly -->
+        <a href="draw-badly.html" class="card">
+            <div class="card-preview">
+                <div class="card-preview-bg" style="background: linear-gradient(135deg, #0a0a1a, #1a0a20);"></div>
+                <span class="card-label label-game">🎮 Game</span>
+                <span class="card-preview-icon">🎨</span>
+            </div>
+            <div class="card-body">
+                <div class="card-title">Draw But Badly</div>
+                <div class="card-desc">A drawing canvas where your tools are cursed. Spaghetti lines, drunk cursor,
+                    rainbow mode, and more.</div>
+                <div class="card-footer">
+                    <div class="card-tags"><span class="card-tag">🎨 Drawing</span><span class="card-tag">😈
+                            Cursed</span><span class="card-tag">🤣 Funny</span></div>
+                    <div class="card-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg></div>
+                </div>
+            </div>
+        </a>
+
+        <div class="no-results" id="no-results">
+            <div class="nr-emoji">🔍</div>
+            <p>No sites found matching your search.</p>
+            <button class="suggest-btn" onclick="openSuggestModal()" style="margin-top:20px; position:static;">
+                <span style="font-size: 1.2rem;">💡</span> Suggest Idea
+            </button>
+        </div>
+    </main>
+
+    <!-- Suggest Idea UI -->
+    <button class="suggest-btn" onclick="openSuggestModal()" title="Suggest an Idea">
+        <span style="font-size: 1.2rem;">💡</span> Suggest Idea
+    </button>
+
+    <div class="modal-overlay" id="suggest-modal" onclick="if(event.target === this) closeSuggestModal()">
+        <div class="modal">
+            <button class="modal-close" onclick="closeSuggestModal()">×</button>
+            <div id="suggest-form-view">
+                <h2>Suggest an Idea</h2>
+                <p style="color: var(--text-sub); font-size: 0.9rem; margin-bottom: 20px; line-height: 1.5;">
+                    Have a crazy idea for a new interactive experiment, game, or toy? Submit it and we'll see it instantly!
+                </p>
+                <input type="text" id="idea-title" class="modal-input" placeholder="Idea Title (e.g. 3D CSS Cube)">
+                <textarea id="idea-desc" class="modal-input"
+                    placeholder="Describe how it works... give me all the weird details."></textarea>
+                <button class="modal-submit" id="submit-btn" onclick="submitIdea()">Submit to the Void 🚀</button>
+            </div>
+                <h2 style="margin-bottom: 10px;">Idea Received!</h2>
+                <p style="color: var(--text-sub); font-size: 0.9rem; line-height: 1.5;">Your suggestion has been beamed into the void. We'll review it soon!</p>
+                <button class="modal-submit" onclick="closeSuggestModal()" style="margin-top: 20px;">Close</button>
+            </div>
+            <div id="suggest-error-view" style="display:none; text-align:center; padding: 30px 0;">
+                <div style="font-size: 3rem; margin-bottom: 16px;">⚠️</div>
+                <h2 style="margin-bottom: 10px;">Something Went Wrong</h2>
+                <p style="color: var(--text-sub); font-size: 0.9rem; line-height: 1.5;" id="suggest-error-msg">Could not send your idea. Please try again later.</p>
+                <button class="modal-submit" onclick="resetSuggestModal()" style="margin-top: 20px;">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+
+<footer>
+        <p><span id="footer-text" style="cursor:help">WWG — Weird Website Gallery</span> · Made with <span
+                id="footer-logic" style="cursor:help">✦</span> and curiosity
+            <br><br>
+            <span id="footer-version" style="font-size: 0.6rem; opacity: 0.3; cursor: pointer;">v5.0.0-VOID</span><br>
+        <div id="guide-link-container" style="display:none;">
+            <a href="cheatsheet.html"
+                style="color:rgba(255,255,255,0.2);text-decoration:none;font-size:0.7rem;transition:0.3s;"
+                onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,0.2)'">Archive
+                Guide
+                (25)</a>
+        </div>
+        </p>
+    </footer>
+
+    <script>
+        (function () {
+            const cards = document.querySelectorAll('.gallery .card');
+            const search = document.getElementById('search');
+            const pills = document.querySelectorAll('.filter-pill');
+            const countEl = document.getElementById('filter-count');
+            const noResults = document.getElementById('no-results');
+            const scrollBtn = document.getElementById('scroll-top');
+            const total = cards.length;
+            document.querySelector('.hero-count strong').textContent = total;
+            let activeFilter = 'all';
+
+            // Staggered entrance animation
+            cards.forEach((c, i) => { c.style.animationDelay = (i * 0.04) + 's'; });
+
+            // Get card category from its label
+            function getCategory(card) {
+                const label = card.querySelector('.card-label');
+                if (!label) return '';
+                const cls = label.className;
+                if (cls.includes('label-game')) return 'game';
+                if (cls.includes('label-creative')) return 'creative';
+                if (cls.includes('label-new')) return 'new';
+                if (cls.includes('label-interactive')) return 'interactive';
+                if (cls.includes('label-chill')) return 'chill';
+                if (cls.includes('label-weird')) return 'weird';
+                return '';
+            }
+
+            // Get searchable text
+            function getText(card) {
+                return (card.querySelector('.card-title')?.textContent + ' ' +
+                    card.querySelector('.card-desc')?.textContent + ' ' +
+                    (card.querySelector('.card-tags')?.textContent || '')).toLowerCase();
+            }
+
+            function filterCards() {
+                const q = search.value.toLowerCase().trim();
+                let visible = 0;
+
+                cards.forEach((card, i) => {
+                    const cat = getCategory(card);
+                    const tags = card.dataset.tags || '';
+                    const text = getText(card);
+                    const matchCat = activeFilter === 'all' || cat === activeFilter || tags.includes(activeFilter);
+                    const matchSearch = !q || text.includes(q);
+
+                    if (matchCat && matchSearch) {
+                        card.classList.remove('hidden');
+                        card.style.animationDelay = (visible * 0.03) + 's';
+                        card.style.animation = 'none';
+                        card.offsetHeight; // reflow
+                        card.style.animation = '';
+                        visible++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                countEl.innerHTML = `Showing <strong>${visible}</strong> of ${total} sites`;
+                noResults.classList.toggle('visible', visible === 0);
+            }
+
+            // Filter pills
+            pills.forEach(p => {
+                p.addEventListener('click', () => {
+                    pills.forEach(x => x.classList.remove('active'));
+                    p.classList.add('active');
+                    activeFilter = p.dataset.filter;
+                    filterCards();
+                });
+            });
+
+            // ════════════════════════════════════
+            // THE BARRIER: SANS TRIGGER (v5.0)
+            // ════════════════════════════════════
+            let logoClicks = 0;
+            document.getElementById('wwg-title')?.addEventListener('click', () => {
+                logoClicks++;
+                if (logoClicks >= 3) {
+                    document.body.style.transition = '1s';
+                    document.body.style.filter = 'invert(1) grayscale(1) contrast(500%)';
+                    setTimeout(() => window.location.href = 'sans-fight.html', 1000);
+                }
+                setTimeout(() => logoClicks = 0, 2500);
+            });
+
+            // The Secret Hub button is now a permanent high-visibility element.
+            // No dynamic redirection needed for the vault-btn anymore.
+
+            // ─── SEARCH still filters cards ───
+            search.addEventListener('input', () => {
+                const q = search.value.toLowerCase().trim();
+                // SECRET COMMANDS
+                if (q === 'terminal' || q === 'boot' || q === 'termos') {
+                    if (window.pageTransition) {
+                        window.pageTransition('termos-gauntlet.html');
+                    } else {
+                        window.location.href = 'termos-gauntlet.html';
+                    }
+                    return;
+                }
+                filterCards();
+            });
+
+            // Scroll to top
+            window.addEventListener('scroll', () => {
+                scrollBtn.classList.toggle('visible', window.scrollY > 400);
+            });
+        })();
+
+        // Suggest Idea Logic
+        function openSuggestModal() {
+
+            document.getElementById('suggest-modal').classList.add('active');
+            document.getElementById('idea-title').focus();
+        }
+
+        function closeSuggestModal() {
+            document.getElementById('suggest-modal').classList.remove('active');
+            // Reset modal views after close animation
+            setTimeout(() => {
+                document.getElementById('suggest-form-view').style.display = 'block';
+                document.getElementById('suggest-success-view').style.display = 'none';
+                document.getElementById('suggest-error-view').style.display = 'none';
+            }, 300);
+        }
+
+        async function submitIdea() {
+            const title = document.getElementById('idea-title').value.trim();
+            const desc = document.getElementById('idea-desc').value.trim();
+            const btn = document.getElementById('submit-btn');
+
+            if (!title || !desc) {
+                alert('Please fill out both the title and description!');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.textContent = 'Sending... ⏳';
+
+            try {
+                const res = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        access_key: 'd8cf64c0-268d-444d-a587-7c2dc7c9e80c',
+                        subject: '💡 WWG Idea: ' + title,
+                        from_name: 'WWG Gallery Suggestion',
+                        message: '**Idea Title:** ' + title + '\n\n**Description:**\n' + desc + '\n\n---\nSubmitted via WWG Gallery'
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('suggest-form-view').style.display = 'none';
+                    document.getElementById('suggest-success-view').style.display = 'block';
+                    document.getElementById('idea-title').value = '';
+                    document.getElementById('idea-desc').value = '';
+                } else {
+                    throw new Error(data.message || 'Submission failed');
+                }
+            } catch (err) {
+                document.getElementById('suggest-form-view').style.display = 'none';
+                document.getElementById('suggest-error-view').style.display = 'block';
+                document.getElementById('suggest-error-msg').textContent = err.message || 'Could not send your idea. Please try again later.';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Submit to the Void 🚀';
+            }
+        }
+
+        function resetSuggestModal() {
+            document.getElementById('suggest-form-view').style.display = 'block';
+            document.getElementById('suggest-success-view').style.display = 'none';
+            document.getElementById('suggest-error-view').style.display = 'none';
+        }
+
+        // Close modal on Escape
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeSuggestModal();
+        });
+    </script>
+    <script src="telemetry.js" defer></script>
+<!-- HINT: The Pattern Breaker connects the four corners of existence in the proper order... -->
+    <script src="transitions.js"></script>
+    <script>
+        // ── Void Starfield Canvas Logic ──
+        (function() {
+            const canvas = document.getElementById('hero-canvas');
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let w, h, stars = [];
+            
+            function init() {
+                const hero = document.querySelector('.hero');
+                w = canvas.width = window.innerWidth;
+                h = canvas.height = hero ? hero.offsetHeight : 450; 
+                stars = [];
+                for(let i=0; i<150; i++) {
+                    stars.push({
+                        x: Math.random() * w,
+                        y: Math.random() * h,
+                        size: Math.random() * 1.5,
+                        speed: Math.random() * 0.5 + 0.2
+                    });
+                }
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, w, h);
+                ctx.fillStyle = '#fff';
+                stars.forEach(s => {
+                    ctx.globalAlpha = 0.3 + Math.random() * 0.4;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.size, 0, Math.PI*2);
+                    ctx.fill();
+                    s.y -= s.speed;
+                    if(s.y < 0) s.y = h;
+                });
+                requestAnimationFrame(animate);
+            }
+            
+            window.addEventListener('resize', init);
+            init();
+            animate();
+        })();
+
+        // ── 3D Card Tilt Logic ──
+        (function() {
+            const cards = document.querySelectorAll('.card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 8;
+                    const rotateY = (centerX - x) / 8;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+                    card.style.transition = 'none';
+                    card.style.zIndex = "10";
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)`;
+                    card.style.transition = 'transform 0.5s ease, box-shadow 0.4s';
+                    card.style.zIndex = "1";
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
